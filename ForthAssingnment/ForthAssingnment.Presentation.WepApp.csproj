@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ForthAssignment.Core.Aplication\ForthAssignment.Core.Aplication.csproj" />
+    <ProjectReference Include="..\ForthAssignment.Core.Domain\ForthAssignment.Core.Domain.csproj" />
+    <ProjectReference Include="..\ForthAssignment.Core.Infraestructure.Persistence\ForthAssignment.Infraestructure.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>
