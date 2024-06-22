@@ -24,7 +24,25 @@ namespace ForthAssignment.Infraestructure.Persistence.Context
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			
+			modelBuilder.Entity<User>( u =>
+			{
+
+			});
+
+			modelBuilder.Entity<UserFriend>(u =>
+			{
+
+			});
+
+			modelBuilder.Entity<Post>(p =>
+			{
+
+			});
+
+			modelBuilder.Entity<Comment>(c =>
+			{
+
+			});
 		}
 	}
 }
