@@ -5,6 +5,7 @@ using ForthAssignment.Core.Aplication.Core;
 using ForthAssignment.Core.Aplication.Interfaces.Contracts;
 using ForthAssignment.Core.Aplication.Interfaces.Repositories;
 using ForthAssignment.Core.Aplication.Models.User;
+using ForthAssignment.Core.Aplication.Utils.PasswordHasher;
 using ForthAssignment.Core.Aplication.Utils.UserSessionHandler;
 using ForthAssignment.Core.Domain.Entities;
 using Microsoft.AspNetCore.Http;
@@ -16,12 +17,14 @@ namespace ForthAssignment.Core.Aplication.Services
 		private readonly IUserRepository _userRepository;
 		private readonly IMapper _mapper;
 		private readonly IHttpContextAccessor _httpContextAccessor;
+		private readonly IPasswordHasher _passwordHasher;
 
-		public UserService(IUserRepository userRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(userRepository, mapper)
+		public UserService(IUserRepository userRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor, IPasswordHasher passwordHasher) : base(userRepository, mapper)
 		{
 			_userRepository = userRepository;
 			_mapper = mapper;
 			_httpContextAccessor = httpContextAccessor;
+			_passwordHasher = passwordHasher;
 		}
 
 		public async Task<Result<UserModel>> ActivateUser(Guid id)
@@ -94,7 +97,6 @@ namespace ForthAssignment.Core.Aplication.Services
 					result.Message = "username or password is empty";
 					return result;
 				}
-				string hashPassword = password;
 
 				User UserGetted = await _userRepository.Login(userName);
 
@@ -106,6 +108,7 @@ namespace ForthAssignment.Core.Aplication.Services
 				}
 
 				// check that user password is legit
+				bool IsTheCorrectPassword = _passwordHasher.VerifyPassword(UserGetted.Password, password);
 
 				result.Data = _mapper.Map<UserModel>(UserGetted);
 
@@ -132,6 +135,7 @@ namespace ForthAssignment.Core.Aplication.Services
 		public override async Task<Result<UserSaveModel>> Save(UserSaveModel saveModel)
 		{
 			// hash password
+			saveModel.Password = _passwordHasher.HashPassword(saveModel.Password);
 			return await base.Save(saveModel);
 		}
 	}
