@@ -19,7 +19,9 @@ namespace ForthAssignment.Core.Aplication.Utils.Mapper
 				.ReverseMap();
 
 			CreateMap<User, UserSaveModel>()
-				.ReverseMap()
+                 .ForMember(dest => dest.File, opt => opt.Ignore())
+                 .ForMember(dest => dest.ConfirmPassword, opt => opt.Ignore())
+                .ReverseMap()
 				.ForMember(dest => dest.UserFriends, opt => opt.Ignore())
 				.ForMember(dest => dest.UserPosts, opt => opt.Ignore())
 				.ForMember(dest => dest.UserComments, opt => opt.Ignore());
@@ -52,7 +54,8 @@ namespace ForthAssignment.Core.Aplication.Utils.Mapper
 				.ForMember(dest => dest.UserThatPostThis, opt => opt.Ignore());
 
 			CreateMap<Post, PostSaveModel>()
-				.ReverseMap()
+                .ForMember(dest => dest.File, opt => opt.Ignore())
+                .ReverseMap()
 				.ForMember(dest => dest.UserThatPostThis, opt => opt.Ignore())
 				.ForMember(dest => dest.Comments, opt => opt.Ignore());
 
@@ -66,7 +69,8 @@ namespace ForthAssignment.Core.Aplication.Utils.Mapper
 				.ForMember(dest => dest.UserId, opt => opt.Ignore());
 
 			CreateMap<Comment, CommentSaveModel>()
-				.ReverseMap()
+                .ForMember(dest => dest.File, opt => opt.Ignore())
+                .ReverseMap()
 				.ForMember(dest => dest.UserThatCommentetThis, opt => opt.Ignore());
 
 			#endregion

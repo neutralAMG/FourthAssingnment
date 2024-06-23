@@ -137,9 +137,9 @@ namespace ForthAssignment.Core.Aplication.Core
 			}
 		}
 
-		public async Task<Result<TModel>> Update(TSaveModel updateModel)
+		public async Task<Result<TSaveModel>> Update(TSaveModel updateModel)
 		{
-			Result<TModel> result = new();
+			Result<TSaveModel> result = new();
 			try
 			{
                 if (updateModel is null)

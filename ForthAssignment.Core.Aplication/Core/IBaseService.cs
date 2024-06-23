@@ -9,6 +9,6 @@ namespace ForthAssignment.Core.Aplication.Core
 		Task<Result<List<TModel>>> GetAll();
 		Task<Result<TModel>> GetById(Guid id);
 		Task<Result<TSaveModel>> Save(TSaveModel entity);
-		Task<Result<TModel>> Update(TSaveModel entity);
+		Task<Result<TSaveModel>> Update(TSaveModel entity);
 	}
 }

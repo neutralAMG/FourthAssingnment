@@ -109,6 +109,8 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
         {
             try
             {
+                if (!await Exits(u => u.UserName == username)) return null; 
+
                 User UserToChangePassword = await GetUserByUserName(username);
 
                 UserToChangePassword.Password = password;

@@ -1,5 +1,7 @@
 ﻿
 
+using Microsoft.AspNetCore.Http;
+
 namespace ForthAssignment.Core.Aplication.Models.User
 {
 	public class UserSaveModel
@@ -12,6 +14,9 @@ namespace ForthAssignment.Core.Aplication.Models.User
 		public string Email { get; set; }
 		public string? ProfileImageUrl { get; set; }
 		public string Password { get; set; }
+		public string ConfirmPassword { get; set; }
+
 		public bool IsActive { get; set; }
+		public IFormFile File { get; set; }
 	}
 }

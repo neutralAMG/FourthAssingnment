@@ -1,5 +1,66 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model ForthAssignment.Core.Aplication.Models.User.UserModel
+
+@if (ViewBag.messageError is not null)
+{
+    <p class="alert-danger d-block text-center">@ViewBag.messageError</p>
 }
+<div class="row">
+    <div class="col-8 offset-2">
+        <div class=" bg-dark text-light">
+            <h1 class="text-center"> Edit Your profile information </h1>
+        </div>
+        <div class="card shadow-sm">
+            <div class="card-body">
+
+                <section>
+                    <form method="post" enctype="multipart/form-data" asp-controller="User" asp-action="EditUser">
+                        <input type="type" name="Id" value="@Model.Id" class="visually-hidden" />
+                        <input type="type" name="Password" value="@Model.Password" class="visually-hidden" />
+                        <input type="type" name="ConfirmPassword" value="@Model.Password" class="visually-hidden" />
+
+                        <div class="mb-3">
+                            <label for="Name" class="form-label"> Name</label>
+                            <input type="text" name="Name" value="@Model.Name" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="LastName" class="form-label"> Last Name</label>
+                            <input type="text" name="LastName" value="@Model.LastName" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="Email" class="form-label"> EMail Address</label>
+                            <input type="text" name="Email" value="@Model.Email" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="UserName" class="form-label"> User Name</label>
+                            <input type="text" name="UserName" value="@Model.UserName" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="PhoneNumber" class="form-label"> Phone Number</label>
+                            <input type="text" name="PhoneNumber" value="@Model.PhoneNumber" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Password" class="form-label"> Password </label>
+                            <input type="text" name="Password" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="ConfirmPassword" class="form-label"> Password Confirm </label>
+                            <input type="text" name="ConfirmPassword"  class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="File" class="form-label"> profile picture </label>
+                            <input type="file" name="File"  class="form-control" />
+                        </div>
+                        <div class="p-2">
+                            <button asp-controller="User" asp-action="EditUser" class="btn btn-primary  float-end  p-2 "> Edit </button>
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-warning  float-end  p-2  mx-2"> Go Back </a>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>

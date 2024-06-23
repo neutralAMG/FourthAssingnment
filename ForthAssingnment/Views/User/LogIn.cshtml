@@ -1,11 +1,11 @@
 ﻿﻿﻿
-@if (ViewBag.Message is not null)
+@if (ViewBag.MessageError is not null)
 {
     <p class="alert-danger d-block text-center">@ViewBag.message</p>
 }
-@if (ViewBag.UserCreated is not null)
+@if (ViewBag.messageSucces is not null)
 {
-    <p class=" alert alert-success d-block text-center" role="alert">@ViewBag.UserCreated</p>
+    <p class=" alert alert-success d-block text-center" role="alert">@ViewBag.messageSucces</p>
 }
 <div class="row">
     <div class="col-8 offset-2">
@@ -15,7 +15,7 @@
         <div class="card shadow-sm">
             <div class="card-body">
                 <section>
-                    <form method="post" asp-controller="User" asp-action="Login">
+                    <form method="post" asp-controller="User" asp-action="LogIn">
                         <div class="mb-3">
                             <label for="username" class="form-label"> Username</label>
                             <input type="text" name="username" class="form-control" />

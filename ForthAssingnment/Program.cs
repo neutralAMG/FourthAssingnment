@@ -11,6 +11,16 @@ builder.Services.AddInfraestructureLayer(builder.Configuration);
 builder.Services.AddSharedInfraestructureLayer(builder.Configuration);
 builder.Services.AddAplicationLayer();
 
+
+builder.Services.AddCors( options =>  options.AddPolicy("app", op =>
+{
+	op.AllowAnyOrigin();
+	op.AllowAnyHeader();
+
+}
+	
+) );
+
 builder.Services.AddSession();
 
 
@@ -29,9 +39,12 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseSession();
+
+app.UseCors("app");
 app.UseRouting();
 
-app.UseSession();
+
 
 app.UseAuthorization();
 

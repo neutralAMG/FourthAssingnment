@@ -153,6 +153,11 @@ namespace ForthAssignment.Core.Aplication.Services
                 // check that user password is legit
                 bool IsTheCorrectPassword = _passwordHasher.VerifyPassword(UserGetted.Password, password);
 
+                if (!IsTheCorrectPassword) {
+                    result.IsSuccess = false;
+                    result.Message = "the Password was incorrect ";
+                    return result;
+                }
                 result.Data = _mapper.Map<UserModel>(UserGetted);
 
                 if (result.Data == null)
@@ -188,12 +193,15 @@ namespace ForthAssignment.Core.Aplication.Services
                     EmailTo = SaveOperation.Data.Email,
                     EmailSubject = "Let's activate your user ",
 
-                    EmailBody = new StringBuilder().Append("<!DOCTYPE html>\r\n<html lang=\"en\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n    <title>Activate Your Account</title>\r\n    <style>\r\n        body {\r\n            font-family: Arial, sans-serif;\r\n            line-height: 1.6;\r\n            color: #333;\r\n        }\r\n        .container {\r\n            max-width: 600px;\r\n            margin: 0 auto;\r\n            padding: 20px;\r\n            border: 1px solid #ddd;\r\n            border-radius: 5px;\r\n        }\r\n        .button {\r\n            display: inline-block;\r\n            padding: 10px 20px;\r\n            margin-top: 20px;\r\n            font-size: 16px;\r\n            color: #fff;\r\n            background-color: #28a745;\r\n            text-align: center;\r\n            text-decoration: none;\r\n            border-radius: 5px;\r\n        }\r\n        .button:hover {\r\n            background-color: #218838;\r\n        }\r\n    </style>\r\n</head>\r\n<body>\r\n    <div class=\"container\">\r\n        <h1>Welcome to Our Service</h1>\r\n        <p>Hello,</p>\r\n        <p>Thank you for registering with us. Please click the button below to activate your account:</p>\r\n        <form action=\"ActivateUser\" method=\"POST\">\r\n            <input type=\"hidden\" name=\"id\" value= "+ SaveOperation.Data.Id+">           <button type=\"submit\" class=\"button\">Activate Account</button>\r\n        </form>\r\n        <p>If you did not register for this account, please ignore this email.</p>\r\n        <p>Best regards,<br>The Team</p>\r\n    </div>\r\n</body>\r\n</html>").ToString()
+                    EmailBody = new StringBuilder().Append("<!DOCTYPE html>\r\n<html lang=\"en\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n    <title>Activate Your Account</title>\r\n    <style>\r\n        body {\r\n            font-family: Arial, sans-serif;\r\n            line-height: 1.6;\r\n            color: #333;\r\n        }\r\n        .container {\r\n            max-width: 600px;\r\n            margin: 0 auto;\r\n            padding: 20px;\r\n            border: 1px solid #ddd;\r\n            border-radius: 5px;\r\n        }\r\n        .button {\r\n            display: inline-block;\r\n            padding: 10px 20px;\r\n            margin-top: 20px;\r\n            font-size: 16px;\r\n            color: #fff;\r\n            background-color: #28a745;\r\n            text-align: center;\r\n            text-decoration: none;\r\n            border-radius: 5px;\r\n        }\r\n        .button:hover {\r\n            background-color: #218838;\r\n        }\r\n    </style>\r\n</head>\r\n<body>\r\n    <div class=\"container\">\r\n        <h1>Welcome to Our Service</h1>\r\n        <p>Hello,</p>\r\n        <p>Thank you for registering with us. Please click the button below to activate your account:</p>\r\n        <a href=\"https://localhost:7143/ActivateUser?id=" + SaveOperation.Data.Id + "\" class=\"button\">Activate Account</a>\r\n        <p>If you did not register for this account, please ignore this email.</p>\r\n        <p>Best regards,<br>The Team</p>\r\n    </div>\r\n</body>\r\n</html>").ToString()
 
                 });
             }
 
             return SaveOperation;
         }
+
+
+
     }
 }

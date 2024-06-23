@@ -9,8 +9,7 @@ namespace ForthAssignment.Core.Aplication.Utils.UserSessionHandler
 		public static T Get<T>(this ISession session, string key)
 		{
 			var sessionValue = session.GetString(key);
-			var returndValue = sessionValue == null? default : JsonConvert.DeserializeObject<T>(sessionValue);
-			return returndValue;
+			return sessionValue == null? default : JsonConvert.DeserializeObject<T>(sessionValue);
 		}
 		public static void Set<T>(this ISession session, string key, T value)
 		{
