@@ -10,7 +10,7 @@ namespace ForthAssignment.Infraestructure.Shared
 {
 	public static class ServiceRegistration
 	{
-		public static void AddSharedInfraestructureLayer(this IServiceCollection services,IConfiguration config)
+		public static void AddSharedInfraestructureLayer(this IServiceCollection services, IConfiguration config)
 		{
 			services.Configure<MailSettings>(config.GetSection( "MailSettings"));
 			services.AddTransient<IEmailService, EmailService>();

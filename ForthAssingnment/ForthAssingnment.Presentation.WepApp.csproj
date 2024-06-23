@@ -10,6 +10,7 @@
     <ProjectReference Include="..\ForthAssignment.Core.Aplication\ForthAssignment.Core.Aplication.csproj" />
     <ProjectReference Include="..\ForthAssignment.Core.Domain\ForthAssignment.Core.Domain.csproj" />
     <ProjectReference Include="..\ForthAssignment.Core.Infraestructure.Persistence\ForthAssignment.Infraestructure.Persistence.csproj" />
+    <ProjectReference Include="..\ForthAssignment.Infraestructure.Shared\ForthAssignment.Infraestructure.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

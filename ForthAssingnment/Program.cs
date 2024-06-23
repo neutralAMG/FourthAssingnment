@@ -1,8 +1,19 @@
+using ForthAssignment.Core.Aplication;
+using ForthAssignment.Infraestructure.Persistence;
+using ForthAssignment.Infraestructure.Shared;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddAplicationLayer();
+builder.Services.AddInfraestructureLayer(builder.Configuration);
+builder.Services.AddSharedInfraestructureLayer(builder.Configuration);
 builder.Services.AddSession();
+
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
