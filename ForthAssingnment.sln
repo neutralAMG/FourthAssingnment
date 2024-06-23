@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34916.146
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForthAssingnment.Presentation.WepApp", "ForthAssingnment\ForthAssingnment.Presentation.WepApp.csproj", "{70E80638-E367-463D-83A7-3E84BBA1D595}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForthAssingnment.Presentation.WepApp", "ForthAssingnment\ForthAssingnment.Presentation.WepApp.csproj", "{70E80638-E367-463D-83A7-3E84BBA1D595}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{345655D2-CC28-474E-BC1B-D7BDE9FA96AF}"
 EndProject
@@ -15,11 +15,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApp", "WebApp", "{A7E538
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infraestructure", "Infraestructure", "{C1E6A461-E35A-48DB-A9A5-1D43F669E920}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForthAssignment.Core.Aplication", "ForthAssignment.Core.Aplication\ForthAssignment.Core.Aplication.csproj", "{CF49FC3E-D0ED-403A-B0CF-60ABEF51741A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForthAssignment.Core.Aplication", "ForthAssignment.Core.Aplication\ForthAssignment.Core.Aplication.csproj", "{CF49FC3E-D0ED-403A-B0CF-60ABEF51741A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForthAssignment.Infraestructure.Persistence", "ForthAssignment.Core.Infraestructure.Persistence\ForthAssignment.Infraestructure.Persistence.csproj", "{722E03B1-8411-4067-8C11-73E94EE959BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForthAssignment.Infraestructure.Persistence", "ForthAssignment.Core.Infraestructure.Persistence\ForthAssignment.Infraestructure.Persistence.csproj", "{722E03B1-8411-4067-8C11-73E94EE959BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForthAssignment.Core.Domain", "ForthAssignment.Core.Domain\ForthAssignment.Core.Domain.csproj", "{C3BF5074-4044-4B69-8975-24E27B50DAC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForthAssignment.Core.Domain", "ForthAssignment.Core.Domain\ForthAssignment.Core.Domain.csproj", "{C3BF5074-4044-4B69-8975-24E27B50DAC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForthAssignment.Infraestructure.Shared", "ForthAssignment.Infraestructure.Shared\ForthAssignment.Infraestructure.Shared.csproj", "{FCB43211-EB40-4A93-9E3D-7FC67F924930}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{C3BF5074-4044-4B69-8975-24E27B50DAC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3BF5074-4044-4B69-8975-24E27B50DAC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3BF5074-4044-4B69-8975-24E27B50DAC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCB43211-EB40-4A93-9E3D-7FC67F924930}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCB43211-EB40-4A93-9E3D-7FC67F924930}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCB43211-EB40-4A93-9E3D-7FC67F924930}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCB43211-EB40-4A93-9E3D-7FC67F924930}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,6 +62,7 @@ Global
 		{CF49FC3E-D0ED-403A-B0CF-60ABEF51741A} = {5D1CAF07-4279-4E2C-A925-F1DDC65E960D}
 		{722E03B1-8411-4067-8C11-73E94EE959BE} = {C1E6A461-E35A-48DB-A9A5-1D43F669E920}
 		{C3BF5074-4044-4B69-8975-24E27B50DAC5} = {5D1CAF07-4279-4E2C-A925-F1DDC65E960D}
+		{FCB43211-EB40-4A93-9E3D-7FC67F924930} = {C1E6A461-E35A-48DB-A9A5-1D43F669E920}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1B709B09-E266-474A-9F28-F2EE96268C21}

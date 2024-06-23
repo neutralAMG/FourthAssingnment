@@ -3,6 +3,7 @@ using AutoMapper;
 using ForthAssignment.Core.Aplication.Core;
 using ForthAssignment.Core.Aplication.Interfaces.Contracts;
 using ForthAssignment.Core.Aplication.Interfaces.Repositories;
+using ForthAssignment.Core.Aplication.Models.Post;
 using ForthAssignment.Core.Aplication.Models.User;
 using ForthAssignment.Core.Aplication.Models.UserFriend;
 using ForthAssignment.Core.Domain.Entities;
@@ -20,6 +21,33 @@ namespace ForthAssignment.Core.Aplication.Services
 			_userFriendRepository = userFriendRepository;
 			_mapper = mapper;
 		}
+
+		public async Task<Result<UserFriendModel>> Delete(Guid id)
+		{
+			Result<UserFriendModel> result = new();
+			try
+			{
+				UserFriend userToToBeDeleted = await _userFriendRepository.GetById(id);
+				if (userToToBeDeleted is null)
+				{
+					result.IsSuccess = false;
+					result.Message = "Error deleting the friend of the user";
+					return result;
+				}
+				bool DeleteOperationResult = await _userFriendRepository.Delete(userToToBeDeleted);
+
+				result.Message = "Succes deleting the user's friends";
+				return result;
+			}
+			catch
+			{
+				result.IsSuccess = false;
+				result.Message = "Critical error deleting the friend of the user";
+				return result;
+				throw;
+			}
+		}
+
 
 		public async Task<Result<List<UserModel>>> GetUserFriends(Guid id)
 		{

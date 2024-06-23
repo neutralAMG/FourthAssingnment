@@ -27,6 +27,32 @@ namespace ForthAssignment.Core.Aplication.Services
 			_CurrentUser = _httpContextAccessor.HttpContext.Session.Get<UserModel>("user");
 		}
 
+		public async Task<Result<PostModel>> Delete(Guid id)
+		{
+			Result<PostModel> result = new();
+			try
+			{
+				Post postToBeDeleted = await _postRepository.GetById(id);
+				if (postToBeDeleted is null)
+				{
+					result.IsSuccess = false;
+					result.Message = "Error deleting the post's of the user";
+					return result;
+				}
+				bool DeleteOperationResult = await _postRepository.Delete(postToBeDeleted);
+
+				result.Message = "Succes deleting the post";
+				return result;
+			}
+			catch
+			{
+				result.IsSuccess = false;
+				result.Message = "Critical error deleting the post's of the user";
+				return result;
+				throw;
+			}
+		}
+
 		public override async Task<Result<List<PostModel>>> GetAll()
 		{
 			Result<List<PostModel>> result = new();

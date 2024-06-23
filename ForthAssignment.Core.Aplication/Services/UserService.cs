@@ -18,13 +18,15 @@ namespace ForthAssignment.Core.Aplication.Services
 		private readonly IMapper _mapper;
 		private readonly IHttpContextAccessor _httpContextAccessor;
 		private readonly IPasswordHasher _passwordHasher;
+		private readonly IEmailService _emailService;
 
-		public UserService(IUserRepository userRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor, IPasswordHasher passwordHasher) : base(userRepository, mapper)
+		public UserService(IUserRepository userRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor, IPasswordHasher passwordHasher, IEmailService emailService) : base(userRepository, mapper)
 		{
 			_userRepository = userRepository;
 			_mapper = mapper;
 			_httpContextAccessor = httpContextAccessor;
 			_passwordHasher = passwordHasher;
+			_emailService = emailService;
 		}
 
 		public async Task<Result<UserModel>> ActivateUser(Guid id)
@@ -136,7 +138,19 @@ namespace ForthAssignment.Core.Aplication.Services
 		{
 			// hash password
 			saveModel.Password = _passwordHasher.HashPassword(saveModel.Password);
-			return await base.Save(saveModel);
+			Result<UserSaveModel> SaveOperation =  await base.Save(saveModel);
+
+			if (SaveOperation.IsSuccess)
+			{
+				_emailService.SendAsync(new Dtos.EmailRequest
+				{
+					EmailTo = SaveOperation.Data.Email,
+					EmailSubject = "Let's activate your user ",
+					EmailBody = ""
+				});
+			}
+
+			return SaveOperation;
 		}
 	}
 }
