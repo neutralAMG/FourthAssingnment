@@ -10,6 +10,7 @@ namespace ForthAssignment.Core.Aplication.Interfaces.Contracts
 		Task<Result<UserModel>> Login(string userName, string password);
 		Task<Result<UserModel>> ActivateUser(Guid id);
 		Task<Result<UserModel>> GetUserByUserName(string UserName);
+        Task<Result<UserModel>> ChangePassword(string username);
 
-	}
+    }
 }

@@ -9,7 +9,7 @@ namespace ForthAssignment.Core.Aplication.Utils.UserAuth
 	public class UserAuth : IUserAuth
 	{
 		private readonly IHttpContextAccessor _httpContextAccessor;
-		private readonly UserModel _currentUser;
+		private readonly UserModel? _currentUser;
 		public UserAuth(IHttpContextAccessor httpContextAccessor)
         {
 			_httpContextAccessor = httpContextAccessor;
@@ -17,6 +17,7 @@ namespace ForthAssignment.Core.Aplication.Utils.UserAuth
 		}
         public bool IsUserActivated()
 		{
+			if(_currentUser is null) return false;
 			return _currentUser.IsActive;
 		}
 

@@ -3,6 +3,7 @@
 using ForthAssignment.Core.Aplication.Interfaces.Contracts;
 using ForthAssignment.Core.Aplication.Services;
 using ForthAssignment.Core.Aplication.Utils.FileHandler;
+using ForthAssignment.Core.Aplication.Utils.PasswordGenerator;
 using ForthAssignment.Core.Aplication.Utils.PasswordHasher;
 using ForthAssignment.Core.Aplication.Utils.UserAuth;
 using Microsoft.AspNetCore.Http;
@@ -26,6 +27,7 @@ namespace ForthAssignment.Core.Aplication
 
 			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 			services.AddSingleton<IPasswordHasher, PasswordHasher>();
+			services.AddSingleton<IPasswordGenerator, PasswordGenerator>();
 			services.AddSingleton<IUserAuth,  UserAuth>();	
 			services.AddSingleton<IFileHandler, FileHandler>();
 

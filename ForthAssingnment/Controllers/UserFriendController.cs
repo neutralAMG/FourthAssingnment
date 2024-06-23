@@ -1,4 +1,5 @@
 ﻿using ForthAssignment.Core.Aplication.Interfaces.Contracts;
+using ForthAssignment.Core.Aplication.Models.UserFriend;
 using ForthAssignment.Core.Aplication.Utils.UserAuth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,7 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 			_userAuth = userAuth;
 		}
 		// GET: UserFriendController
-		public ActionResult Index()
+		public async Task<IActionResult> Index()
 		{
 			return View();
 		}
@@ -28,16 +29,22 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 		}
 
 		// GET: UserFriendController/Create
-		public ActionResult Create()
+		public async Task<IActionResult> SaveANewFriend()
 		{
+			if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
+			if (!_userAuth.IsUserActivated()) return RedirectToAction("NotActivated", "Home");
+
 			return View();
 		}
 
 		// POST: UserFriendController/Create
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Create(IFormCollection collection)
+		public async Task<IActionResult> SaveANewFriend(string username, UserFriendSaveModel saveModel)
 		{
+			if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
+			if (!_userAuth.IsUserActivated()) return RedirectToAction("NotActivated", "Home");
+
 			try
 			{
 				return RedirectToAction(nameof(Index));
@@ -70,16 +77,22 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 		}
 
 		// GET: UserFriendController/Delete/5
-		public ActionResult Delete(int id)
+		public async Task<IActionResult> DeleteUserFriend(Guid id)
 		{
+			if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
+			if (!_userAuth.IsUserActivated()) return RedirectToAction("NotActivated", "Home");
+
 			return View();
 		}
 
 		// POST: UserFriendController/Delete/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Delete(int id, IFormCollection collection)
+		public async Task<IActionResult> DeleteUserFriend(Guid id, IFormCollection collection)
 		{
+			if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
+			if (!_userAuth.IsUserActivated()) return RedirectToAction("NotActivated", "Home");
+
 			try
 			{
 				return RedirectToAction(nameof(Index));

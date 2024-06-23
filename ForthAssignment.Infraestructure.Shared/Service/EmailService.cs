@@ -22,6 +22,7 @@ namespace ForthAssignment.Infraestructure.Shared.Service
 			{
 				MimeMessage email = new();
 				email.Sender = MailboxAddress.Parse($" {_mailSettings.DisplayName}  < {_mailSettings.EmailFrom} >");
+				email.From.Add( MailboxAddress.Parse(_mailSettings.EmailFrom));
 				email.To.Add(MailboxAddress.Parse(emailRequest.EmailTo));
 				email.Subject = emailRequest.EmailSubject;
 

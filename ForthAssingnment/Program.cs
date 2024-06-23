@@ -6,9 +6,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddAplicationLayer();
+
 builder.Services.AddInfraestructureLayer(builder.Configuration);
 builder.Services.AddSharedInfraestructureLayer(builder.Configuration);
+builder.Services.AddAplicationLayer();
+
 builder.Services.AddSession();
 
 

@@ -5,7 +5,11 @@ namespace ForthAssignment.Core.Domain.Entities
 {
 	public class Comment : BaseDateRegisterdEntity
 	{
-		public Guid CommentRespondingTo { get; set; }
+        public Comment()
+        {
+            DateCreated = DateTime.Now;
+        }
+        public Guid CommentRespondingTo { get; set; }
 		public string CommentText { get; set; }
 		public string? CommentImgUrl { get; set; }
 
