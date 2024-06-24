@@ -5,6 +5,7 @@ using ForthAssignment.Core.Aplication.Core;
 using ForthAssignment.Core.Aplication.Interfaces.Contracts;
 using ForthAssignment.Core.Aplication.Interfaces.Repositories;
 using ForthAssignment.Core.Aplication.Models.User;
+using ForthAssignment.Core.Aplication.Utils.NewFolder;
 using ForthAssignment.Core.Aplication.Utils.PasswordGenerator;
 using ForthAssignment.Core.Aplication.Utils.PasswordHasher;
 using ForthAssignment.Core.Aplication.Utils.UserSessionHandler;
@@ -22,8 +23,9 @@ namespace ForthAssignment.Core.Aplication.Services
         private readonly IPasswordHasher _passwordHasher;
         private readonly IEmailService _emailService;
         private readonly IPasswordGenerator _passwordGenerator;
+        private readonly IGenerateCode _generateCode;
 
-        public UserService(IUserRepository userRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor, IPasswordHasher passwordHasher, IEmailService emailService, IPasswordGenerator passwordGenerator) : base(userRepository, mapper)
+        public UserService(IUserRepository userRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor, IPasswordHasher passwordHasher, IEmailService emailService, IPasswordGenerator passwordGenerator, IGenerateCode generateCode) : base(userRepository, mapper)
         {
             _userRepository = userRepository;
             _mapper = mapper;
@@ -31,14 +33,27 @@ namespace ForthAssignment.Core.Aplication.Services
             _passwordHasher = passwordHasher;
             _emailService = emailService;
             _passwordGenerator = passwordGenerator;
+            _generateCode = generateCode;
         }
 
-        public async Task<Result<UserModel>> ActivateUser(Guid id)
+        public async Task<Result<UserModel>> ActivateUser(string code)
         {
             Result<UserModel> result = new();
             try
             {
-                await _userRepository.ActivateUser(id);
+                UserModel currentUser = _httpContextAccessor.HttpContext.Session.Get<UserModel>("user");
+                string ConfirmationCode = _httpContextAccessor.HttpContext.Session.GetString("code");
+                if (!code.Equals(ConfirmationCode))
+                {
+                    result.IsSuccess = false;
+                    result.Message = "incorrect Code or your code expired";
+                    return result;
+                }
+                await _userRepository.ActivateUser(currentUser.Id);
+
+                UserModel UpdatedUser = _mapper.Map<UserModel>( _userRepository.GetById(currentUser.Id).Result);
+
+                _httpContextAccessor.HttpContext.Session.Set<UserModel>("user", UpdatedUser);
                 result.Message = "User Activated";
                 return result;
             }
@@ -188,12 +203,17 @@ namespace ForthAssignment.Core.Aplication.Services
 
             if (SaveOperation.IsSuccess)
             {
-                _emailService.SendAsync(new Dtos.EmailRequest
+
+                string CodeToBySend =  _generateCode.GenerateCode();
+
+                _httpContextAccessor.HttpContext.Session.SetString("code", CodeToBySend);
+
+               await _emailService.SendAsync(new Dtos.EmailRequest
                 {
                     EmailTo = SaveOperation.Data.Email,
                     EmailSubject = "Let's activate your user ",
 
-                    EmailBody = new StringBuilder().Append("<!DOCTYPE html>\r\n<html lang=\"en\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n    <title>Activate Your Account</title>\r\n    <style>\r\n        body {\r\n            font-family: Arial, sans-serif;\r\n            line-height: 1.6;\r\n            color: #333;\r\n        }\r\n        .container {\r\n            max-width: 600px;\r\n            margin: 0 auto;\r\n            padding: 20px;\r\n            border: 1px solid #ddd;\r\n            border-radius: 5px;\r\n        }\r\n        .button {\r\n            display: inline-block;\r\n            padding: 10px 20px;\r\n            margin-top: 20px;\r\n            font-size: 16px;\r\n            color: #fff;\r\n            background-color: #28a745;\r\n            text-align: center;\r\n            text-decoration: none;\r\n            border-radius: 5px;\r\n        }\r\n        .button:hover {\r\n            background-color: #218838;\r\n        }\r\n    </style>\r\n</head>\r\n<body>\r\n    <div class=\"container\">\r\n        <h1>Welcome to Our Service</h1>\r\n        <p>Hello,</p>\r\n        <p>Thank you for registering with us. Please click the button below to activate your account:</p>\r\n        <a href=\"https://localhost:7143/ActivateUser?id=" + SaveOperation.Data.Id + "\" class=\"button\">Activate Account</a>\r\n        <p>If you did not register for this account, please ignore this email.</p>\r\n        <p>Best regards,<br>The Team</p>\r\n    </div>\r\n</body>\r\n</html>").ToString()
+                    EmailBody = new StringBuilder().Append("<!DOCTYPE html>\r\n<html lang=\"en\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n    <title>Activate Your Account</title>\r\n    <style>\r\n        body {\r\n            font-family: Arial, sans-serif;\r\n            line-height: 1.6;\r\n            color: #333;\r\n        }\r\n        .container {\r\n            max-width: 600px;\r\n            margin: 0 auto;\r\n            padding: 20px;\r\n            border: 1px solid #ddd;\r\n            border-radius: 5px;\r\n        }\r\n        .code {\r\n            display: inline-block;\r\n            padding: 10px;\r\n            margin-top: 20px;\r\n            font-size: 16px;\r\n            color: #fff;\r\n            background-color: #28a745;\r\n            text-align: center;\r\n            border-radius: 5px;\r\n            font-weight: bold;\r\n        }\r\n    </style>\r\n</head>\r\n<body>\r\n    <div class=\"container\">\r\n        <h1>Welcome to Our Service</h1>\r\n        <p>Hello,</p>\r\n        <p>Thank you for registering with us. Please use the following code to activate your account:</p>\r\n        <div class=\"code\">" + CodeToBySend + "</div>\r\n        <p>If you did not register for this account, please ignore this email.</p>\r\n        <p>Best regards,<br>The Team</p>\r\n    </div>\r\n</body>\r\n</html>").ToString()
 
                 });
             }
@@ -202,6 +222,22 @@ namespace ForthAssignment.Core.Aplication.Services
         }
 
 
+        public override async Task<Result<UserSaveModel>> Update(UserSaveModel updateModel)
+        {
+            Result<UserSaveModel> result = new();
 
+            result = await base.Update(updateModel);
+
+            if (result.IsSuccess)
+            {
+                UserModel currentUser = _httpContextAccessor.HttpContext.Session.Get<UserModel>("user");
+
+                UserModel UpdatedUser = _mapper.Map<UserModel>(_userRepository.GetById(currentUser.Id).Result);
+
+                _httpContextAccessor.HttpContext.Session.Set<UserModel>("user", UpdatedUser);
+            }
+
+            return result;
+        }
     }
 }

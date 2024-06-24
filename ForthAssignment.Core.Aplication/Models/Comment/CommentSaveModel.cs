@@ -12,6 +12,7 @@ namespace ForthAssignment.Core.Aplication.Models.Comment
 
 		public Guid PostId { get; set; }
 		public Guid UserId { get; set; }
+        public DateTime DateCreated { get; set; }
         public IFormFile File { get; set; }
     }
 }

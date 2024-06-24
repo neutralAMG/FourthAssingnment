@@ -97,5 +97,12 @@ namespace ForthAssignment.Core.Aplication.Services
 				throw;
 			}
 		}
-	}
+
+        public override async Task<Result<PostSaveModel>> Save(PostSaveModel saveModel)
+		{
+			saveModel.UserId = _CurrentUser.Id;
+			return await base.Save(saveModel);
+		}
+
+    }
 }

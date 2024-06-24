@@ -41,7 +41,7 @@
                         @if (IsTheUserLogIn)
                         {
                          <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Post" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="UserFriend" asp-action="Index">Friends</a>
@@ -49,6 +49,9 @@
                         <li class="nav-item">
                                 <a href="@Url.Action("EditUser", "User", new{id = user.Id})" class="nav-link text-dark">Profile</a>
                         </li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("LogOut", "User")" class="nav-link text-dark">Log Out</a>
+                            </li>
                         }
 
 

@@ -11,8 +11,9 @@ namespace ForthAssignment.Core.Aplication.Models.Post
 		public Guid Id { get; set; }
 		public string PostText { get; set; }
 		public string? PostImgUrl { get; set; }
-
-		public UserModel UserThatPostThis { get; set; }
+        public string? VideoUrl { get; set; }
+        public DateTime DateCreated { get; set; }
+        public UserModel UserThatPostThis { get; set; }
 		public IList<CommentModel> Comments { get; set; }
 	}
 }

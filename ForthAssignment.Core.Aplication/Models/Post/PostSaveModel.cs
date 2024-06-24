@@ -9,7 +9,9 @@ namespace ForthAssignment.Core.Aplication.Models.Post
 		public Guid Id { get; set; }
 		public string PostText { get; set; }
 		public string? PostImgUrl { get; set; }
-		public Guid UserId { get; set; }
+        public string? VideoUrl { get; set; }
+        public Guid UserId { get; set; }
+        public DateTime DateCreated { get; set; }
         public IFormFile File { get; set; }
     }
 }

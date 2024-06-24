@@ -49,6 +49,8 @@ namespace ForthAssignment.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CommentRespondingTo");
+
                     b.HasIndex("PostId");
 
                     b.HasIndex("UserId");
@@ -74,6 +76,9 @@ namespace ForthAssignment.Infraestructure.Persistence.Migrations
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("VideoUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -149,10 +154,16 @@ namespace ForthAssignment.Infraestructure.Persistence.Migrations
 
             modelBuilder.Entity("ForthAssignment.Core.Domain.Entities.Comment", b =>
                 {
+                    b.HasOne("ForthAssignment.Core.Domain.Entities.Comment", "ParentComment")
+                        .WithMany("Comments")
+                        .HasForeignKey("CommentRespondingTo")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
                     b.HasOne("ForthAssignment.Core.Domain.Entities.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.HasOne("ForthAssignment.Core.Domain.Entities.User", "UserThatCommentetThis")
@@ -160,6 +171,8 @@ namespace ForthAssignment.Infraestructure.Persistence.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("ParentComment");
 
                     b.Navigation("Post");
 
@@ -194,6 +207,11 @@ namespace ForthAssignment.Infraestructure.Persistence.Migrations
                     b.Navigation("User");
 
                     b.Navigation("UsersFriend");
+                });
+
+            modelBuilder.Entity("ForthAssignment.Core.Domain.Entities.Comment", b =>
+                {
+                    b.Navigation("Comments");
                 });
 
             modelBuilder.Entity("ForthAssignment.Core.Domain.Entities.Post", b =>

@@ -3,6 +3,8 @@
 using ForthAssignment.Core.Aplication.Interfaces.Contracts;
 using ForthAssignment.Core.Aplication.Services;
 using ForthAssignment.Core.Aplication.Utils.FileHandler;
+using ForthAssignment.Core.Aplication.Utils.GenerateCode;
+using ForthAssignment.Core.Aplication.Utils.NewFolder;
 using ForthAssignment.Core.Aplication.Utils.PasswordGenerator;
 using ForthAssignment.Core.Aplication.Utils.PasswordHasher;
 using ForthAssignment.Core.Aplication.Utils.UserAuth;
@@ -30,6 +32,7 @@ namespace ForthAssignment.Core.Aplication
 			services.AddSingleton<IPasswordGenerator, PasswordGenerator>();
 			services.AddSingleton<IUserAuth,  UserAuth>();	
 			services.AddSingleton<IFileHandler, FileHandler>();
+			services.AddSingleton<IGenerateCode, GenerateCode>();
 
 		}
 	}

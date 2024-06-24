@@ -1,0 +1,92 @@
+﻿@using ForthAssignment.Core.Aplication.Models.Post
+@model List<PostModel>
+
+@if (ViewBag.messageError is not null)
+{
+    <p class="alert-danger d-block text-center">@ViewBag.messageError</p>
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Create Post Form -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>Create a Post</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="PostANewPublication" asp-controller="Post" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <textarea class="form-control" name="PostText" rows="3" placeholder="What's on your mind?" required></textarea>
+                        </div>
+                        <div class="form-group mt-2">
+                            <input type="file" class="form-control-file" name="File" />
+                        </div>
+                        <div class="form-group mt-2">
+                            <input type="text" class="form-control" name="VideoUrl" placeholder="Video URL" />
+                        </div>
+                        <div class="form-group text-right mt-2">
+                            <button type="submit" class="btn btn-primary">Post</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            @if (Model.Count == 0)
+            {
+                <h1 class="text-center d-block"> You have not posted anything yet.</h1>
+            }
+
+            <!-- Posts List -->
+            @foreach (var post in Model)
+            {
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-2">
+                            <img src="@Url.Content(post.UserThatPostThis.ProfileImageUrl)" alt="Profile Picture" class="rounded-circle" width="50" height="50" onerror="this.onerror=null; this.src='/images/default-profile.png';">
+                            <div class="ml-3">
+                                <h5 class="card-title mb-0">@post.UserThatPostThis.UserName @post.UserThatPostThis.LastName</h5>
+                                <small class="text-muted">@post.DateCreated.ToString("g")</small>
+                            </div>
+                        </div>
+                        <p class="card-text">@post.PostText</p>
+                        @if (!string.IsNullOrEmpty(post.PostImgUrl))
+                        {
+                            <img src="@Url.Content(post.PostImgUrl)" class="img-fluid w-100" alt="Post Image" onerror="this.onerror=null; this.src='/images/default-post.png';">
+                        }
+                        else if (!string.IsNullOrEmpty(post.VideoUrl))
+                        {
+                            <div class="embed-responsive embed-responsive-16by9">
+                                <iframe class="embed-responsive-item w-100 h-100" src="@post.VideoUrl" allowfullscreen allow="autoplay"></iframe>
+                            </div>
+                        }
+                    </div>
+                    <div class="card-footer text-muted d-flex justify-content-between align-items-center">
+                        <span>@post.Comments.Count() comments</span>
+                        <a href="@Url.Action("EditPost", "Post", new { id = post.Id })" type="button" class="btn btn-sm btn-outline-secondary">Update</a>
+                    </div>
+                    <!-- Comments List -->
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            @foreach (var comment in post.Comments)
+                            {
+                                <div class="media mb-3">
+                                    <img src="@Url.Content(comment.UserThatCommentetThis.ProfileImageUrl)" alt="Profile Picture" class="mr-3 rounded-circle" width="40" height="40" onerror="this.onerror=null; this.src='/images/default-profile.png';">
+                                    <div class="media-body">
+                                        <h6 class="mt-0">@comment.UserThatCommentetThis.UserName @comment.UserThatCommentetThis.LastName</h6>
+                                        <p>@comment.CommentText</p>
+                                        @if (!string.IsNullOrEmpty(comment.CommentImgUrl))
+                                        {
+                                            <img src="@Url.Content(comment.CommentImgUrl)" class="img-fluid w-100" alt="Comment Image" onerror="this.onerror=null; this.src='/images/default-comment.png';">
+                                        }
+                                        <small class="text-muted">@comment.DateCreated.ToString("g")</small>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

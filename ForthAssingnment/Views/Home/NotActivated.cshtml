@@ -22,6 +22,16 @@
                         <input type="hidden" name="Email" value="@user.Email" />
                         <button type="submit" class="btn btn-outline-warning mt-3">Resend Email</button>
                     </form>
+                    <hr />
+                    <p class="card-text">Or enter the activation code you received in the email:</p>
+                    <form method="post" asp-action="ActivateUser" asp-controller="User" class="d-inline">
+                        <div class="form-group">
+                            <label for="activationCode">Activation Code</label>
+                            <input type="text" name="code" class="form-control" id="activationCode" required />
+                        </div>
+                        <input type="hidden" name="id" value="@user.Id" />
+                        <button type="submit" class="btn btn-outline-warning mt-3">Activate Account</button>
+                    </form>
                 </div>
             </div>
         </div>

@@ -5,10 +5,7 @@ namespace ForthAssignment.Core.Domain.Entities
 {
 	public class Comment : BaseDateRegisterdEntity
 	{
-        public Comment()
-        {
-            DateCreated = DateTime.Now;
-        }
+
         public Guid CommentRespondingTo { get; set; }
 		public string CommentText { get; set; }
 		public string? CommentImgUrl { get; set; }
@@ -19,5 +16,10 @@ namespace ForthAssignment.Core.Domain.Entities
 		public Post Post { get; set; }
 		[ForeignKey("UserId")]
 		public User UserThatCommentetThis { get; set; }
+
+        [ForeignKey("CommentRespondingTo")]
+        public Comment ParentComment { get; set; }
+       
+		public IList<Comment> Comments { get; set; }
 	}
 }

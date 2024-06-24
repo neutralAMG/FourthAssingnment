@@ -1,0 +1,35 @@
+﻿@model ForthAssignment.Core.Aplication.Models.Post.PostModel
+
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white text-center">
+        <h3>Create a Post</h3>
+    </div>
+    <div class="card-body">
+        <form asp-action="EditPost" asp-controller="Post" method="post" enctype="multipart/form-data">
+
+            <input type="type" name="Id" value="@Model.Id" class="visually-hidden" />
+            <input type="type" name="PostImgUrl" value="@Model.PostImgUrl" class="visually-hidden" />
+
+            <div class="form-group">
+                <textarea class="form-control" name="PostText" value="@Model.PostText" rows="3" placeholder="What's on your mind?" required>@Model.PostText</textarea>
+            </div>
+
+            @if(Model.PostImgUrl != null)
+            {
+                <div class="form-group mt-2">
+                    <input type="file" class="form-control-file" name="File" />
+                </div>
+            }
+            else
+            {
+             <div class="form-group mt-2">
+                <input type="text" class="form-control" name="VideoUrl" value="@Model.VideoUrl" placeholder="Video URL" />
+            </div>
+            }
+            <div class="p-2 form-group text-right mt-2">
+                <button asp-controller="Post" asp-action="EditPost" class="btn btn-primary  float-end  p-2 "> Edit </button>
+                <a asp-controller="Post" asp-action="Index" class="btn btn-outline-warning  float-end  p-2  mx-2"> Go Back </a>
+            </div>
+        </form>
+    </div>
+</div>

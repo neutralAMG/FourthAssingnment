@@ -65,13 +65,17 @@ namespace ForthAssignment.Core.Aplication.Utils.Mapper
 			#region Comment model configuration
 			CreateMap<Comment, CommentModel>()
 				.ForMember(dest => dest.UserThatCommentetThis, opt => opt.MapFrom(src => src.UserThatCommentetThis))
+				.ForMember(dest => dest.ParentComment, opt => opt.MapFrom(src => src.ParentComment))
+				.ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments))
 				.ReverseMap()
 				.ForMember(dest => dest.UserId, opt => opt.Ignore());
 
 			CreateMap<Comment, CommentSaveModel>()
                 .ForMember(dest => dest.File, opt => opt.Ignore())
                 .ReverseMap()
-				.ForMember(dest => dest.UserThatCommentetThis, opt => opt.Ignore());
+				.ForMember(dest => dest.UserThatCommentetThis, opt => opt.Ignore())
+                .ForMember(dest => dest.ParentComment, opt => opt.Ignore())
+                .ForMember(dest => dest.Comments, opt => opt.Ignore());
 
 			#endregion
 

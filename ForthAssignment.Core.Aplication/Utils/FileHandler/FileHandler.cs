@@ -7,15 +7,17 @@ namespace ForthAssignment.Core.Aplication.Utils.FileHandler
 	{
 		public string UploudFile(IFormFile file, string basePath, Guid id)
 		{
-			string path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot{basePath}");
+            basePath = $"{basePath}/{id}";
 
-			if (!Directory.Exists(path))
+            string path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot{basePath}");
+
+            if (!Directory.Exists(path))
 			{
 				Directory.CreateDirectory(path);
 			}
 
 			Guid guid = Guid.NewGuid();
-			FileInfo fileInfo = new FileInfo(file.Name);
+			FileInfo fileInfo = new FileInfo(file.FileName);
 			string fileName = guid + fileInfo.Extension;
 			string fileNameWithPath = Path.Combine(path, fileName); 
 			
@@ -23,17 +25,19 @@ namespace ForthAssignment.Core.Aplication.Utils.FileHandler
 			{
 				file.CopyTo(stream);
 			}
-			return $"{basePath}/{file.Name}";
+			return $"{basePath}/{fileName}";
 
 		}	
 
-		public string UpdateFile(IFormFile file, Guid id, string basePath,  string ImagUrl = "" )
+		public string UpdateFile(IFormFile file, Guid id, string basePath,  string ImagUrl)
 		{
 			if(file is null)
 			{
 				return ImagUrl;
 			}
-			string path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot{basePath}");
+			basePath = $"{basePath}/{id}";
+
+            string path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot{basePath}");
 
 			if (!Directory.Exists(path))
 			{
@@ -41,7 +45,7 @@ namespace ForthAssignment.Core.Aplication.Utils.FileHandler
 			}
 
 			Guid guid = Guid.NewGuid();
-			FileInfo fileInfo = new FileInfo(file.Name);
+			FileInfo fileInfo = new FileInfo(file.FileName);
 			string fileName = guid + fileInfo.Extension;
 			string fileNameWithPath = Path.Combine(path, fileName);
 
@@ -57,14 +61,16 @@ namespace ForthAssignment.Core.Aplication.Utils.FileHandler
 			{
 				System.IO.File.Delete(CompleteOldPath);
 			}
-			return $"{basePath}/{file.Name}";
+			return $"{basePath}/{fileName}";
 		}
 
-		public void DeleteFile(string basePath)
+		public void DeleteFile(Guid id, string basePath)
 		{
-			string path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot{basePath}");
+            basePath = $"{basePath}/{id}";
 
-			if (Directory.Exists(path))
+            string path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot{basePath}");
+
+            if (Directory.Exists(path))
 			{
 				DirectoryInfo directoryInfo = new(path);
 				foreach (FileInfo file in directoryInfo.GetFiles())

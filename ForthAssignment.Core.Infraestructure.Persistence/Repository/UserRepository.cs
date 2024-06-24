@@ -23,8 +23,9 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
         public override async Task<User> GetById(Guid id)
         {
             return await _context.Users
+                .Include(u => u.UserPosts)
                 .Include(u => u.UserFriends)
-                .Include(u => u.UserPosts).Where(u => u.Id == id).FirstOrDefaultAsync();
+                .Where(u => u.Id == id).FirstOrDefaultAsync();
         }
 
         public override async Task<User> Save(User entity)
@@ -48,7 +49,7 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
         {
             try
             {
-                User UserToBeUpdated = await GetById(entity.Id);
+                User UserToBeUpdated = _context.Users.Find(entity.Id);
                 UserToBeUpdated.Name = entity.UserName;
                 UserToBeUpdated.LastName = entity.LastName;
                 UserToBeUpdated.Email = entity.Email;

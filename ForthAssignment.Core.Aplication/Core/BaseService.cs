@@ -137,7 +137,7 @@ namespace ForthAssignment.Core.Aplication.Core
 			}
 		}
 
-		public async Task<Result<TSaveModel>> Update(TSaveModel updateModel)
+		public virtual async Task<Result<TSaveModel>> Update(TSaveModel updateModel)
 		{
 			Result<TSaveModel> result = new();
 			try

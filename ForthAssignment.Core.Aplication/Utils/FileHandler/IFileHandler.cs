@@ -7,7 +7,7 @@ namespace ForthAssignment.Core.Aplication.Utils.FileHandler
 	{
 		string UploudFile(IFormFile file, string basePath,  Guid id);
 		string UpdateFile(IFormFile file, Guid id, string basePath, string ImagUrl = "");
-		void DeleteFile(string basePath);
+		void DeleteFile(Guid id, string basePath);
 	}
 }
 

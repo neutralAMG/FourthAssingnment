@@ -44,7 +44,8 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
 		{
 			try
 			{
-				await base.Save(entity);
+                entity.DateCreated = DateTime.Now;
+                await base.Save(entity);
 
 				return entity;
 			}

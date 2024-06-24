@@ -12,6 +12,9 @@ namespace ForthAssignment.Core.Aplication.Models.Comment
 		public string? CommentImgUrl { get; set; }
 
 		public PostModel Post { get; set; }
-		public UserModel UserThatCommentetThis { get; set; }
-	}
+        public DateTime DateCreated { get; set; }
+        public UserModel UserThatCommentetThis { get; set; }
+        public CommentModel ParentComment { get; set; }
+        public IList<CommentModel> Comments { get; set; }
+    }
 }

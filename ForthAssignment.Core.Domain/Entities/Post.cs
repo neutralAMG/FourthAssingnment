@@ -5,12 +5,10 @@ namespace ForthAssignment.Core.Domain.Entities
 {
 	public class Post : BaseDateRegisterdEntity
 	{
-        public Post()
-        {
-            DateCreated = DateTime.Now;
-        }
+
         public string PostText { get; set; }
 		public string? PostImgUrl { get; set; }
+		public string? VideoUrl { get; set; }
 		public Guid UserId { get; set; }
 
 

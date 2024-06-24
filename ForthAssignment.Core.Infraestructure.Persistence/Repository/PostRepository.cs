@@ -22,7 +22,7 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
 		}
 		public async Task<List<Post>> GetAll(Guid id)
 		{
-			return await _context.Posts.Include(p => p.Comments).Where(p => p.UserId == id).ToListAsync();	
+			return await _context.Posts.Include(p => p.Comments).Include(p => p.UserThatPostThis).Where(p => p.UserId == id).ToListAsync();	
 		}
 
 		public async Task<List<Post>> GetAllFrindsPosts(List<UserFriend> UsersFriends, Guid userId)
@@ -63,8 +63,9 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
 
 			try
 			{
+				entity.DateCreated = DateTime.Now;
 				await base.Save(entity);
-
+				
 				return entity;
 			}
 			catch
@@ -80,6 +81,7 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
 				Post PostToBeUpdated = await GetById(entity.Id);
 				PostToBeUpdated.PostText = entity.PostText;
 				PostToBeUpdated.PostImgUrl = entity.PostImgUrl;
+				PostToBeUpdated.VideoUrl = entity.VideoUrl;
 
 				return await base.Update(PostToBeUpdated);
 			}

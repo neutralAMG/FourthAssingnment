@@ -54,7 +54,7 @@ namespace ForthAssignment.Infraestructure.Persistence.Context
 			{
                 p.HasKey(p => p.Id);
                 p.HasOne(p => p.UserThatPostThis).WithMany(u => u.UserPosts).HasForeignKey(u => u.UserId).OnDelete(DeleteBehavior.Cascade);
-                p.HasMany(p => p.Comments).WithOne(c => c.Post).HasForeignKey(u => u.PostId);
+                p.HasMany(p => p.Comments).WithOne(c => c.Post).HasForeignKey(u => u.PostId).OnDelete(DeleteBehavior.Cascade);
 
                 p.Property(p => p.UserId).IsRequired();
                 p.Property(p => p.PostText).IsRequired();
@@ -67,7 +67,10 @@ namespace ForthAssignment.Infraestructure.Persistence.Context
 			{
                 c.HasKey(c => c.Id);
                 c.HasOne(c => c.UserThatCommentetThis).WithMany(u => u.UserComments).HasForeignKey(u => u.UserId).OnDelete(DeleteBehavior.NoAction);
-                c.HasOne(c => c.Post).WithMany(c => c.Comments).HasForeignKey(u => u.PostId).OnDelete(DeleteBehavior.Cascade);
+                c.HasOne(c => c.Post).WithMany(c => c.Comments).HasForeignKey(u => u.PostId).OnDelete(DeleteBehavior.ClientCascade);
+
+
+				c.HasOne(c => c.ParentComment).WithMany(c => c.Comments).HasForeignKey(u => u.CommentRespondingTo).OnDelete(DeleteBehavior.ClientCascade);
 
                 c.Property(c => c.UserId).IsRequired();
                 c.Property(c => c.CommentImgUrl);

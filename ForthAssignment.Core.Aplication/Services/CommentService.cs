@@ -3,7 +3,11 @@ using ForthAssignment.Core.Aplication.Core;
 using ForthAssignment.Core.Aplication.Interfaces.Contracts;
 using ForthAssignment.Core.Aplication.Interfaces.Repositories;
 using ForthAssignment.Core.Aplication.Models.Comment;
+using ForthAssignment.Core.Aplication.Models.Post;
+using ForthAssignment.Core.Aplication.Models.User;
+using ForthAssignment.Core.Aplication.Utils.UserSessionHandler;
 using ForthAssignment.Core.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace ForthAssignment.Core.Aplication.Services
 {
@@ -11,12 +15,16 @@ namespace ForthAssignment.Core.Aplication.Services
 	{
 		private readonly ICommentRepository _commentRepository;
 		private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserModel _CurrentUser;
 
-		public CommentService(ICommentRepository commentRepository, IMapper mapper) : base(commentRepository, mapper)
+        public CommentService(ICommentRepository commentRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(commentRepository, mapper)
 		{
 			_commentRepository = commentRepository;
 			_mapper = mapper;
-		}
+            _httpContextAccessor = httpContextAccessor;
+			_CurrentUser = _httpContextAccessor.HttpContext.Session.Get<UserModel>("user");
+        }
 
 		public async Task<Result<CommentSaveModel>> RespondComment(CommentSaveModel comment, Guid CommentBeingRRespondedToId)
 		{
@@ -48,5 +56,11 @@ namespace ForthAssignment.Core.Aplication.Services
 				throw;
 			}
 		}
-	}
+
+        public override async Task<Result<CommentSaveModel>> Save(CommentSaveModel saveModel)
+        {
+            saveModel.UserId = _CurrentUser.Id;
+            return await base.Save(saveModel);
+        }
+    }
 }
