@@ -63,8 +63,12 @@
 
                     <div class="card-footer text-muted">
                         <span>@post.Comments.Count() comments</span>
-                        <a href="@Url.Action("EditPost", "Post", new { id = post.Id })" type="button" class="btn btn-sm btn-outline-secondary">Update</a>
-                        <a href="@Url.Action("DeletePost", "Post", new { id = post.Id })" type="button" class="btn btn-sm btn-outline-danger">Delete</a>
+                        @if (User.Id == post.UserThatPostThis.Id)
+                        {
+
+                            <a href="@Url.Action("EditPost", "Post", new { id = post.Id })" type="button" class="btn btn-sm btn-outline-secondary">Update</a>
+                            <a href="@Url.Action("DeletePost", "Post", new { id = post.Id })" type="button" class="btn btn-sm btn-outline-danger">Delete</a>
+                        }
                     </div>
                     @if(User.Id != post.UserThatPostThis.Id)
                     {        

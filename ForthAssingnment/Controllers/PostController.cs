@@ -4,6 +4,7 @@ using ForthAssignment.Core.Aplication.Models.Post;
 using ForthAssignment.Core.Aplication.Utils.FileHandler;
 using ForthAssignment.Core.Aplication.Utils.UserAuth;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ForthAssingnment.Presentation.WepApp.Controllers
 {
@@ -179,7 +180,22 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 			if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
 			if (!_userAuth.IsUserActivated()) return RedirectToAction("NotActivated", "Home");
 
-			return View();
+            Result<PostModel> result = new();
+            try
+            {
+                result = await _postService.GetById(id);
+
+                if (!result.IsSuccess)
+                {
+
+                }
+
+                return View(result.Data);
+            }
+            catch
+            {
+                throw;
+            }
 		}
 
 		// POST: PostController/Delete/5
@@ -190,14 +206,17 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 			if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
 			if (!_userAuth.IsUserActivated()) return RedirectToAction("NotActivated", "Home");
 
-			try
-			{
-				return RedirectToAction(nameof(Index));
-			}
-			catch
-			{
-				return View();
-			}
-		}
+            Result<PostModel> result = new();
+            try
+            {
+                
+                result = await _postService.Delete(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
 	}
 }

@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Post\DeletePost.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ForthAssignment.Core.Aplication\ForthAssignment.Core.Aplication.csproj" />
     <ProjectReference Include="..\ForthAssignment.Core.Domain\ForthAssignment.Core.Domain.csproj" />
     <ProjectReference Include="..\ForthAssignment.Core.Infraestructure.Persistence\ForthAssignment.Infraestructure.Persistence.csproj" />
@@ -26,18 +22,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Post\DeletePost.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Views\Post\DeletePost.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\Post\DeletePost.cshtml" />
   </ItemGroup>
 
 </Project>
