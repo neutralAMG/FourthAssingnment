@@ -1,5 +1,6 @@
 ﻿using ForthAssignment.Core.Domain.Core;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ForthAssignment.Core.Domain.Entities
 {

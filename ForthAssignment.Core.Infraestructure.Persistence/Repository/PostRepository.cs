@@ -22,40 +22,41 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
 		}
 		public async Task<List<Post>> GetAll(Guid id)
 		{
-			return await _context.Posts.Include(p => p.Comments.Where(c => c.CommentRespondingTo == null)).ThenInclude(c => c.Comments).ThenInclude(c => c.Comments).Include(p => p.UserThatPostThis).Where(p => p.UserId == id).OrderByDescending( p => p.DateCreated).ToListAsync();	
+			return await _context.Posts.Include(p => p.Comments.Where(c => c.CommentRespondingTo == null))
+                    .ThenInclude(c => c.Comments).ThenInclude(c => c.Comments)
+                    .Include(p => p.Comments.Where(c => c.CommentRespondingTo == null)).ThenInclude(u => u.UserThatCommentetThis)
+                    .Include(p => p.UserThatPostThis).Where(p => p.UserId == id).OrderByDescending( p => p.DateCreated).ToListAsync();	
 		}
 
-		public async Task<List<Post>> GetAllFrindsPosts(List<UserFriend> UsersFriends, Guid userId)
+		public async Task<List<Post>> GetAllFrindsPosts(List<User> UsersFriends, Guid userId)
 		{
-			List<Post> postOfFirends = new();
-
-			List<User> FriendsOfTheUser = new();
+			List<Post> postOfFriends = new();
 			//O(n + n**2)
-			foreach (UserFriend user in UsersFriends)
-			{
-                if (user.UserId == userId)
-                {
-					FriendsOfTheUser.Add(user.UsersFriend);
-				}
-	
-            };
 
-			foreach (User user in FriendsOfTheUser)
+			foreach (User user in UsersFriends)
 			{
-				var currentFriendPosts = await _context.Posts.Include(p => p.Comments.Where( c => c.CommentRespondingTo == null)).ThenInclude(c => c.Comments).ThenInclude(c => c.Comments).Include(p => p.UserThatPostThis).Where(u => u.UserId == user.Id).ToListAsync();
-
+				var currentFriendPosts = 
+					await _context.Posts
+					.Include(p => p.Comments.Where(c => c.CommentRespondingTo == null))
+					.ThenInclude(c => c.Comments).ThenInclude(c => c.Comments)
+					.Include(p => p.Comments.Where(c => c.CommentRespondingTo == null)).ThenInclude(u => u.UserThatCommentetThis)
+					.Include(p => p.UserThatPostThis)
+					.Where(u => u.UserId == user.Id).ToListAsync();
 				foreach (Post post in currentFriendPosts)
 				{
-					postOfFirends.Add(post);
+					postOfFriends.Add(post);
 				}
 			}
 
-			return postOfFirends.OrderByDescending(p => p.DateCreated.Date).ToList();
+			return postOfFriends.OrderByDescending(p => p.DateCreated.Date).ToList();
 		}
 
 		public override async Task<Post> GetById(Guid id)
 		{
-			return await _context.Posts.Include(p => p.Comments).Where(p => p.Id == id).FirstOrDefaultAsync();
+			return await _context.Posts.Include(p => p.Comments.Where(c => c.CommentRespondingTo == null))
+                    .ThenInclude(c => c.Comments).ThenInclude(c => c.Comments)
+                    .Include(p => p.Comments.Where(c => c.CommentRespondingTo == null)).ThenInclude(u => u.UserThatCommentetThis)
+                    .Include(p => p.UserThatPostThis).Where(p => p.Id == id).FirstOrDefaultAsync();
 		}
 
 		public override async Task<Post> Save(Post entity)

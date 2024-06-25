@@ -48,7 +48,7 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 		// POST: CommentController/Create
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> PostANewComment(CommentSaveModel saveModel)
+		public async Task<IActionResult> PostANewComment(string num, CommentSaveModel saveModel)
 		{
 			if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
 			if (!_userAuth.IsUserActivated()) return RedirectToAction("NotActivated", "Home");
@@ -67,10 +67,18 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 				{
 					result.Data.CommentImgUrl = _fileHandler.UploudFile(saveModel.File, baseUrl, result.Data.Id);
 					result = await _commentService.Update(result.Data);
+					if (num.Equals("1"))
+					{
+						return RedirectToAction("Index", "Post");
+					}
+                    return RedirectToAction("Index", "UserFriend");
+                }
+				if (num.Equals("1")) { 
 					return RedirectToAction("Index", "Post");
 				}
 
-				return RedirectToAction("Index", "Post");
+                return RedirectToAction("Index", "UserFriend");
+
             }
 			catch
 			{

@@ -1,6 +1,7 @@
 ﻿using ForthAssignment.Core.Aplication.Models.Comment;
 using ForthAssignment.Core.Aplication.Models.Post;
 using ForthAssignment.Core.Aplication.Models.UserFriend;
+using System.Text.Json.Serialization;
 
 namespace ForthAssignment.Core.Aplication.Models.User
 {
@@ -16,7 +17,11 @@ namespace ForthAssignment.Core.Aplication.Models.User
 		public string Password { get; set; }
 		public bool IsActive { get; set; }
 
-		public IList<UserFriendModel> UserFriends { get; set; }
+		[JsonIgnore]
+		public IList<UserModel> UserFriends { get; set; }
+
+		[JsonIgnore]
+		public IList<UserModel> FriendsOfthUser { get; set; }
 		public IList<PostModel> UserPosts { get; set; }
 		public IList<CommentModel> UserComments { get; set; }
 	}

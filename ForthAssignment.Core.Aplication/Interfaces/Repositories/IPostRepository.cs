@@ -7,6 +7,6 @@ namespace ForthAssignment.Core.Aplication.Interfaces.Repositories
 	public interface IPostRepository : IBaseRepository<Post>, IDelete<Post>
 	{
 		Task<List<Post>> GetAll(Guid id);
-		Task<List<Post>> GetAllFrindsPosts(List<UserFriend> UsersFriends, Guid userId);
+		Task<List<Post>> GetAllFrindsPosts(List<User> UsersFriends, Guid userId);
 	}
 }

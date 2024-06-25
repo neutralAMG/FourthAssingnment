@@ -84,7 +84,7 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
 		{
 			try
 			{
-				return _context.UsersFriends.Include(u => u.User).Where(u => u.UserFriendId == id).Select(u => u.User).ToListAsync();
+				return _context.UsersFriends.Include(u => u.User).ThenInclude(u => u.FriendsOfthUser).Select(u => u.UsersFriend).ToListAsync();
 			}
 			catch
 			{

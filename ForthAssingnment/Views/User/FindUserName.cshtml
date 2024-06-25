@@ -1,0 +1,27 @@
+﻿@model ForthAssignment.Core.Aplication.Models.User.UserModel
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 mb-4">
+            <div class="card p-5">
+                <div class="row">
+                    <div class="col-md-4 d-flex justify-content-center align-items-center">
+                        <img src="@Url.Content(Model.ProfileImageUrl ?? "/images/default-profile.png")" class="img-fluid rounded-circle" alt="Profile Picture" style="max-width: 250px;">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h1 class="card-title display-4">@Model.UserName</h1>
+                            <p class="card-text display-5"><strong class="display-5">Name:</strong> @Model.Name @Model.LastName</p>
+                            <p class="card-text display-5"><strong class="display-5">Friends:</strong> @Model.UserFriends.Where(u => u.Id != Model.Id).Count()</p>
+                            <form method="Post" asp-action="SaveANewFriend" asp-controller="UserFriend">
+                                <input type="hidden" name="UserFriendId" value="@Model.Id" />
+                                <input type="hidden" name="UserFriendId" value="@Model.Id" />
+								<button type="submit" class="btn btn-primary">Befriend</button>
+							</form>
+                            
+                            <a href="@Url.Action("Index", "UserFriend")" class="btn btn-secondary">Go Back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -70,7 +70,9 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
             try
             {
 
-                return await _context.Users.Include(u => u.UserFriends).Where(u => u.UserName == username).FirstOrDefaultAsync();
+                return await _context.Users.Include(u => u.UserFriends).ThenInclude(u => u.UsersFriend).ThenInclude(c => c.UserPosts)
+                    .Include(u => u.FriendsOfthUser).ThenInclude(u => u.UsersFriend).ThenInclude(c => c.UserPosts)
+					.Where(u => u.UserName == username).FirstOrDefaultAsync();
             }
             catch
             {
@@ -98,7 +100,8 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
         {
             try
             {
-                return await _context.Users.Where(u => u.UserName.Equals(UserName)).FirstOrDefaultAsync();
+                return await _context.Users.Include(u => u.UserPosts)
+                .Include(u => u.UserFriends).Where(u => u.UserName.Equals(UserName)).FirstOrDefaultAsync();
             }
             catch
             {

@@ -164,6 +164,55 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
             }
         }
 
+        public async Task<IActionResult> FindUserName(UserModel user)
+        {
+            if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
+            if (!_userAuth.IsUserActivated()) return RedirectToAction("NotActivated", "Home");
+            Result<UserModel> ressult = new();
+            try
+            {
+                if (!ressult.IsSuccess)
+                {
+                    ViewBag.messageError = "User Dosent exist in app";
+                    return View();
+                }
+
+                ViewBag.messageSucces = "Your password has been changed, check the email sended to you to check it";
+                return View(user);
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> FindUserName(string username)
+        {
+            if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
+            if (!_userAuth.IsUserActivated()) return RedirectToAction("NotActivated", "Home");
+            Result<UserModel> ressult = new();
+            try
+            {
+
+                ressult = await _userService.GetUserByUserName(username);
+
+                if (!ressult.IsSuccess)
+                {
+                    ViewBag.messageError = "User Dosent exist in app";
+                    return View();
+                }
+
+                ViewBag.messageSucces = "Your password has been changed, check the email sended to you to check it";
+                return View(ressult.Data);
+            }
+            catch
+            {
+                return View();
+            }
+        }
 
         public async Task<IActionResult> ActivateUser()
         {

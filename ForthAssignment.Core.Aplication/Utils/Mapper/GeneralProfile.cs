@@ -13,7 +13,8 @@ namespace ForthAssignment.Core.Aplication.Utils.Mapper
 		{
 			#region User model configuration
 			CreateMap<User, UserModel>()
-				.ForMember(dest => dest.UserFriends, opt => opt.MapFrom(src => src.UserFriends))
+				.ForMember(dest => dest.UserFriends, opt => opt.MapFrom(src => src.UserFriends.Select(u =>u.UsersFriend)))
+				.ForMember(dest => dest.FriendsOfthUser, opt => opt.MapFrom(src => src.FriendsOfthUser.Select(u => u.User)))
 				.ForMember(dest => dest.UserPosts, opt => opt.MapFrom(src => src.UserPosts))
 				.ForMember(dest => dest.UserComments, opt => opt.MapFrom(src => src.UserComments))
 				.ReverseMap();

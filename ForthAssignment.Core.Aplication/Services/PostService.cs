@@ -84,7 +84,7 @@ namespace ForthAssignment.Core.Aplication.Services
 			Result<List<PostModel>> result = new();
 			try
 			{
-				var friendsPosts = _postRepository.GetAllFrindsPosts(_mapper.Map<List<UserFriend>>(_CurrentUser.UserFriends), _CurrentUser.Id);
+				List<Post> friendsPosts = await _postRepository.GetAllFrindsPosts(_mapper.Map<List<User>>(_CurrentUser.UserFriends), _CurrentUser.Id);
 				result.Data = _mapper.Map<List<PostModel>>(friendsPosts);
 				result.Message = "Friends posts getted successfully";
 				return result;

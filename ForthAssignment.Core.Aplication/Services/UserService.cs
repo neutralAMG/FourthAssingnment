@@ -107,10 +107,17 @@ namespace ForthAssignment.Core.Aplication.Services
             Result<UserModel> result = new();
             try
             {
-                if (UserName == null)
+				UserModel currentUser = _httpContextAccessor.HttpContext.Session.Get<UserModel>("user");
+                if (currentUser.UserName == UserName) {
+
+					result.IsSuccess = false;
+					result.Message = "Are you seriously triyng to befirend yourself come man;";
+					return result;
+				}
+				if (UserName == null)
                 {
                     result.IsSuccess = false;
-                    result.Message = "Error getting the user";
+                    result.Message = "user name cant be empty";
                     return result;
                 }
                 User UserGetted = await _userRepository.GetUserByUserName(UserName);

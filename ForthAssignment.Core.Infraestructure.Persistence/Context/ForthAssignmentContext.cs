@@ -1,6 +1,7 @@
 ﻿
 using ForthAssignment.Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace ForthAssignment.Infraestructure.Persistence.Context
 {
@@ -19,6 +20,10 @@ namespace ForthAssignment.Infraestructure.Persistence.Context
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
+			optionsBuilder.ConfigureWarnings(warnings =>
+			{
+				warnings.Ignore(CoreEventId.NavigationBaseIncludeIgnored);
+			});
 			optionsBuilder.UseSqlServer("Server=DESKTOP-LL4GL68; Database=fourthAssingnment; Integrated Security=true; TrustServerCertificate=true;", b => b.MigrationsAssembly("ForthAssignment.Infraestructure.Persistence"));
 		}
 
@@ -30,7 +35,7 @@ namespace ForthAssignment.Infraestructure.Persistence.Context
 				u.HasMany(u => u.UserPosts).WithOne(p => p.UserThatPostThis).HasForeignKey(u => u.UserId).OnDelete(DeleteBehavior.Cascade);
 				u.HasMany(u => u.UserComments).WithOne(c => c.UserThatCommentetThis).HasForeignKey(u => u.UserId).OnDelete(DeleteBehavior.Cascade);
 				u.HasMany(u => u.UserFriends).WithOne(u => u.User).HasForeignKey(u => u.UserId).OnDelete(DeleteBehavior.Cascade);
-				//u.HasMany(u => u.UserFriends).WithOne(u => u.UsersFriend).HasForeignKey(u => u.UserFriendId).OnDelete(DeleteBehavior.Cascade);
+				u.HasMany(u => u.FriendsOfthUser).WithOne(u => u.UsersFriend).HasForeignKey(u => u.UserFriendId).OnDelete(DeleteBehavior.Cascade);
 
 				u.Property(u => u.Name).IsRequired();
 				u.Property(u => u.Email).IsRequired();
@@ -43,7 +48,7 @@ namespace ForthAssignment.Infraestructure.Persistence.Context
 			{
                 u.HasKey(u => u.Id);
                 u.HasOne(u => u.User).WithMany(u => u.UserFriends).HasForeignKey(u => u.UserId).OnDelete(DeleteBehavior.NoAction);
-                u.HasOne(u => u.UsersFriend).WithMany().HasForeignKey(u => u.UserId).OnDelete(DeleteBehavior.NoAction);
+                u.HasOne(u => u.UsersFriend).WithMany(u => u.FriendsOfthUser).HasForeignKey(u => u.UserFriendId).OnDelete(DeleteBehavior.NoAction);
 
                 u.Property(u => u.UserId).IsRequired();
                 u.Property(u => u.UserFriendId).IsRequired();

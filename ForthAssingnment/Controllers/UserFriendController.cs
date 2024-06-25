@@ -1,4 +1,6 @@
-﻿using ForthAssignment.Core.Aplication.Interfaces.Contracts;
+﻿using ForthAssignment.Core.Aplication.Core;
+using ForthAssignment.Core.Aplication.Interfaces.Contracts;
+using ForthAssignment.Core.Aplication.Models.Post;
 using ForthAssignment.Core.Aplication.Models.UserFriend;
 using ForthAssignment.Core.Aplication.Utils.UserAuth;
 using Microsoft.AspNetCore.Http;
@@ -10,16 +12,31 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 	{
 		private readonly IUserFriendService _userFriendService;
 		private readonly IUserAuth _userAuth;
+        private readonly IPostService _postService;
 
-		public UserFriendController(IUserFriendService userFriendService, IUserAuth userAuth)
+        public UserFriendController(IUserFriendService userFriendService, IUserAuth userAuth, IPostService postService)
 		{
 			_userFriendService = userFriendService;
 			_userAuth = userAuth;
-		}
+            _postService = postService;
+        }
 		// GET: UserFriendController
 		public async Task<IActionResult> Index()
 		{
-			return View();
+            if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
+            if (!_userAuth.IsUserActivated()) return RedirectToAction("NotActivated", "Home");
+			Result<List<PostModel>> result = new();
+            try
+			{
+
+				result = await _postService.GetAllFrindsPosts();
+               return View(result.Data);
+			}
+			catch
+			{
+				throw;
+			}
+			
 		}
 
 		// GET: UserFriendController/Details/5
@@ -44,9 +61,17 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 		{
 			if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
 			if (!_userAuth.IsUserActivated()) return RedirectToAction("NotActivated", "Home");
-
+			Result<UserFriendSaveModel> result = new();
 			try
 			{
+				result = await _userFriendService.Save(saveModel);
+
+				if (!result.IsSuccess)
+				{
+					ViewBag.messageError = result.Message;	
+
+					return RedirectToAction(nameof(Index));
+                }
 				return RedirectToAction(nameof(Index));
 			}
 			catch

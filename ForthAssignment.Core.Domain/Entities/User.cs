@@ -14,9 +14,11 @@ namespace ForthAssignment.Core.Domain.Entities
 		public bool IsActive { get; set; }
 
 		public IList<UserFriend> UserFriends { get; set; } 
+
+		public IList<UserFriend> FriendsOfthUser { get; set; } 
+
 		public IList<Post> UserPosts { get; set; } 
 		public IList<Comment> UserComments { get; set; } 
-	//	public IList<PostLike> UserPostLikes { get; set; }
-	//	public IList<CommentLike> UserCommentLikes { get; set; }
+
 	}
 }
