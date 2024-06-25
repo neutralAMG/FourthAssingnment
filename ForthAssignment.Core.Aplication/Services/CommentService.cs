@@ -26,22 +26,24 @@ namespace ForthAssignment.Core.Aplication.Services
 			_CurrentUser = _httpContextAccessor.HttpContext.Session.Get<UserModel>("user");
         }
 
-		public async Task<Result<CommentSaveModel>> RespondComment(CommentSaveModel comment, Guid CommentBeingRRespondedToId)
+		public async Task<Result<CommentSaveModel>> RespondComment(CommentSaveModel saveModel)
 		{
 			Result<CommentSaveModel> result = new();
 			try
 			{
-				if (comment is null)
+				if (saveModel is null)
 				{
 					result.IsSuccess = false;
 					result.Message = "Error responding to the coment";
 					return result;
 				}
-				Comment CommentToSave = _mapper.Map<Comment>(comment);
+                saveModel.UserId = _CurrentUser.Id;
 
-				Comment CommentSaed = await _commentRepository.RespondComment(CommentToSave, CommentBeingRRespondedToId);
+                Comment CommentToSave = _mapper.Map<Comment>(saveModel);
 
-				result.Data = _mapper.Map<CommentSaveModel>(CommentSaed);
+				Comment CommentSaved = await _commentRepository.RespondComment(CommentToSave);
+
+				result.Data = _mapper.Map<CommentSaveModel>(CommentSaved);
 
 				result.Message = "Comment reply was a success";
 

@@ -1,11 +1,10 @@
-﻿@using ForthAssignment.Core.Aplication.Models.Post
-@model List<PostModel>
+﻿@model List<ForthAssignment.Core.Aplication.Models.Post.PostModel>
 
-@if (ViewBag.messageError is not null)
+
+@if (ViewBag.messageError != null)
 {
     <p class="alert-danger d-block text-center">@ViewBag.messageError</p>
 }
-
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -32,13 +31,8 @@
                 </div>
             </div>
 
-            @if (Model.Count == 0)
-            {
-                <h1 class="text-center d-block"> You have not posted anything yet.</h1>
-            }
-
             <!-- Posts List -->
-            @foreach (var post in Model)
+            @foreach (ForthAssignment.Core.Aplication.Models.Post.PostModel post in Model)
             {
                 <div class="card mb-3">
                     <div class="card-body">
@@ -52,40 +46,56 @@
                         <p class="card-text">@post.PostText</p>
                         @if (!string.IsNullOrEmpty(post.PostImgUrl))
                         {
-                            <img src="@Url.Content(post.PostImgUrl)" class="img-fluid w-100" alt="Post Image" onerror="this.onerror=null; this.src='/images/default-post.png';">
+                            <img src="@post.PostImgUrl" class="img-fluid w-100" alt="Post Image">
                         }
                         else if (!string.IsNullOrEmpty(post.VideoUrl))
                         {
                             <div class="embed-responsive embed-responsive-16by9">
-                                <iframe class="embed-responsive-item w-100 h-100" src="@post.VideoUrl" allowfullscreen allow="autoplay"></iframe>
+                                <iframe class="embed-responsive-item w-100 " style=" height:500px;" src="@post.VideoUrl" allowfullscreen allow="autoplay"></iframe>
                             </div>
                         }
                     </div>
-                    <div class="card-footer text-muted d-flex justify-content-between align-items-center">
+
+                    <div class="card-footer text-muted">
                         <span>@post.Comments.Count() comments</span>
-                        <a href="@Url.Action("EditPost", "Post", new { id = post.Id })" type="button" class="btn btn-sm btn-outline-secondary">Update</a>
                     </div>
-                    <!-- Comments List -->
+
                     <div class="card mt-3">
                         <div class="card-body">
-                            @foreach (var comment in post.Comments)
-                            {
-                                <div class="media mb-3">
-                                    <img src="@Url.Content(comment.UserThatCommentetThis.ProfileImageUrl)" alt="Profile Picture" class="mr-3 rounded-circle" width="40" height="40" onerror="this.onerror=null; this.src='/images/default-profile.png';">
-                                    <div class="media-body">
-                                        <h6 class="mt-0">@comment.UserThatCommentetThis.UserName @comment.UserThatCommentetThis.LastName</h6>
-                                        <p>@comment.CommentText</p>
-                                        @if (!string.IsNullOrEmpty(comment.CommentImgUrl))
-                                        {
-                                            <img src="@Url.Content(comment.CommentImgUrl)" class="img-fluid w-100" alt="Comment Image" onerror="this.onerror=null; this.src='/images/default-comment.png';">
-                                        }
-                                        <small class="text-muted">@comment.DateCreated.ToString("g")</small>
+                            <form asp-action="PostANewComment" asp-controller="Comment" method="post" enctype="multipart/form-data"> 
+                                
+                                <input type="hidden"  name="PostId"  value="@post.Id"></input>
+                                <div class="form-row align-items-center">
+                                    <div class="col-auto">
+                                        <input type="text" class="form-control" name="CommentText"  placeholder="Add a comment..." required></input>
+                                       
+                                    </div>
+                                    <div class="col-auto">
+                                        <input type="file" class="form-control-file" name="File" />
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="submit" class="btn btn-primary">Comment</button>
                                     </div>
                                 </div>
-                            }
+                            </form>
                         </div>
-                    </div>
+						<!-- Comments List -->
+						<div class="card mt-3">
+							<div class="card-body">
+								@foreach (ForthAssignment.Core.Aplication.Models.Comment.CommentModel comment in post.Comments)
+								{
+                                    if (comment.CommentRespondingTo == default(Guid))
+                                    {
+                                        @await Html.PartialAsync("CommentList", comment)
+                                    }
+                                    
+								}
+							</div>
+						</div>
+					</div>
                 </div>
+
+   
             }
         </div>
     </div>

@@ -4,6 +4,7 @@ using ForthAssignment.Infraestructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ForthAssignment.Infraestructure.Persistence.Migrations
 {
     [DbContext(typeof(ForthAssignmentContext))]
-    partial class ForthAssignmentContextModelSnapshot : ModelSnapshot
+    [Migration("20240624234606_updateComment")]
+    partial class updateComment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,7 +34,7 @@ namespace ForthAssignment.Infraestructure.Persistence.Migrations
                     b.Property<string>("CommentImgUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("CommentRespondingTo")
+                    b.Property<Guid>("CommentRespondingTo")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CommentText")
@@ -157,7 +160,8 @@ namespace ForthAssignment.Infraestructure.Persistence.Migrations
                     b.HasOne("ForthAssignment.Core.Domain.Entities.Comment", "ParentComment")
                         .WithMany("Comments")
                         .HasForeignKey("CommentRespondingTo")
-                        .OnDelete(DeleteBehavior.ClientCascade);
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
 
                     b.HasOne("ForthAssignment.Core.Domain.Entities.Post", "Post")
                         .WithMany("Comments")
@@ -168,8 +172,7 @@ namespace ForthAssignment.Infraestructure.Persistence.Migrations
                     b.HasOne("ForthAssignment.Core.Domain.Entities.User", "UserThatCommentetThis")
                         .WithMany("UserComments")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("ParentComment");
 

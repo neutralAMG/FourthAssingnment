@@ -6,6 +6,6 @@ namespace ForthAssignment.Core.Aplication.Interfaces.Repositories
 {
 	public interface ICommentRepository : IBaseRepository<Comment>
 	{
-		Task<Comment> RespondComment(Comment entity, Guid CommentBeingRRespondedToId);
+		Task<Comment> RespondComment(Comment entity);
 	}
 }

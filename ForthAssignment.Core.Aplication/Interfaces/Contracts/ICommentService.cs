@@ -8,6 +8,6 @@ namespace ForthAssignment.Core.Aplication.Interfaces.Contracts
 {
 	public interface ICommentService : IBaseService<CommentSaveModel, CommentModel, Comment>
 	{
-		Task<Result<CommentSaveModel>> RespondComment(CommentSaveModel comment, Guid CommentBeingRRespondedToId);
+		Task<Result<CommentSaveModel>> RespondComment(CommentSaveModel comment);
 	}
 }

@@ -22,7 +22,7 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
 		}
 		public async Task<List<Post>> GetAll(Guid id)
 		{
-			return await _context.Posts.Include(p => p.Comments).Include(p => p.UserThatPostThis).Where(p => p.UserId == id).ToListAsync();	
+			return await _context.Posts.Include(p => p.Comments.Where(c => c.CommentRespondingTo == null)).ThenInclude(c => c.Comments).ThenInclude(c => c.Comments).Include(p => p.UserThatPostThis).Where(p => p.UserId == id).OrderByDescending( p => p.DateCreated).ToListAsync();	
 		}
 
 		public async Task<List<Post>> GetAllFrindsPosts(List<UserFriend> UsersFriends, Guid userId)
@@ -42,7 +42,7 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
 
 			foreach (User user in FriendsOfTheUser)
 			{
-				var currentFriendPosts = await _context.Posts.Include(p => p.Comments).Where(u => u.UserId == user.Id).ToListAsync();
+				var currentFriendPosts = await _context.Posts.Include(p => p.Comments.Where( c => c.CommentRespondingTo == null)).ThenInclude(c => c.Comments).ThenInclude(c => c.Comments).Include(p => p.UserThatPostThis).Where(u => u.UserId == user.Id).ToListAsync();
 
 				foreach (Post post in currentFriendPosts)
 				{

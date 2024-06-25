@@ -17,19 +17,25 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
 		}
 		public override async Task<List<Comment>> GetAll()
 		{
-			return await _context.Comments.ToListAsync();
+			return await _context.Comments
+				.Include(c => c.UserThatCommentetThis)
+				.Include(c => c.ParentComment)
+				.Include(c => c.Comments).Include(c => c.Post).ToListAsync();
 		}
 
 		public override async Task<Comment> GetById(Guid id)
 		{
-			return await base.GetById(id);
+			return await _context.Comments
+				.Include( c => c.UserThatCommentetThis)
+				.Include(c => c.ParentComment)
+				.Include(c => c.Comments).Include(c => c.Post).Where(c => c.Id == id).FirstOrDefaultAsync();
 		}
 
-		public async Task<Comment> RespondComment(Comment entity, Guid CommentBeingRRespondedToId)
+		public async Task<Comment> RespondComment(Comment entity)
 		{
 			try
 			{
-				entity.CommentRespondingTo = CommentBeingRRespondedToId;
+                entity.DateCreated = DateTime.Now;
 				await base.Save(entity);
 
 				return entity;
@@ -45,6 +51,7 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
 			try
 			{
                 entity.DateCreated = DateTime.Now;
+				entity.CommentRespondingTo = default;
                 await base.Save(entity);
 
 				return entity;

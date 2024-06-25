@@ -70,7 +70,7 @@ namespace ForthAssignment.Infraestructure.Persistence.Context
                 c.HasOne(c => c.Post).WithMany(c => c.Comments).HasForeignKey(u => u.PostId).OnDelete(DeleteBehavior.ClientCascade);
 
 
-				c.HasOne(c => c.ParentComment).WithMany(c => c.Comments).HasForeignKey(u => u.CommentRespondingTo).OnDelete(DeleteBehavior.ClientCascade);
+				c.HasOne(c => c.ParentComment).WithMany(c => c.Comments).HasForeignKey(u => u.CommentRespondingTo).OnDelete(DeleteBehavior.ClientCascade).IsRequired(false);
 
                 c.Property(c => c.UserId).IsRequired();
                 c.Property(c => c.CommentImgUrl);

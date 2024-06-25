@@ -6,7 +6,7 @@ namespace ForthAssignment.Core.Domain.Entities
 	public class Comment : BaseDateRegisterdEntity
 	{
 
-        public Guid CommentRespondingTo { get; set; }
+        public Guid? CommentRespondingTo { get; set; }
 		public string CommentText { get; set; }
 		public string? CommentImgUrl { get; set; }
 
