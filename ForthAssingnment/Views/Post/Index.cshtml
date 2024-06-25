@@ -1,4 +1,9 @@
-﻿@model List<ForthAssignment.Core.Aplication.Models.Post.PostModel>
+﻿@using ForthAssignment.Core.Aplication.Utils.UserSessionHandler;
+@inject IHttpContextAccessor httpcontext;
+@{
+    ForthAssignment.Core.Aplication.Models.User.UserModel User = httpcontext.HttpContext.Session.Get<ForthAssignment.Core.Aplication.Models.User.UserModel>("user");
+}
+@model List<ForthAssignment.Core.Aplication.Models.Post.PostModel>
 
 
 @if (ViewBag.messageError != null)
@@ -8,7 +13,7 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <!-- Create Post Form -->
+          
             <div class="card mb-4">
                 <div class="card-header bg-primary text-white text-center">
                     <h3>Create a Post</h3>
@@ -31,7 +36,7 @@
                 </div>
             </div>
 
-            <!-- Posts List -->
+          
             @foreach (ForthAssignment.Core.Aplication.Models.Post.PostModel post in Model)
             {
                 <div class="card mb-3">
@@ -58,9 +63,13 @@
 
                     <div class="card-footer text-muted">
                         <span>@post.Comments.Count() comments</span>
+                        <a href="@Url.Action("EditPost", "Post", new { id = post.Id })" type="button" class="btn btn-sm btn-outline-secondary">Update</a>
+                        <a href="@Url.Action("DeletePost", "Post", new { id = post.Id })" type="button" class="btn btn-sm btn-outline-danger">Delete</a>
                     </div>
+                    @if(User.Id != post.UserThatPostThis.Id)
+                    {        
 
-                    <div class="card mt-3">
+                        <div class="card mt-3">
                         <div class="card-body">
                             <form asp-action="PostANewComment" asp-controller="Comment" method="post" enctype="multipart/form-data"> 
                                 
@@ -78,8 +87,10 @@
                                     </div>
                                 </div>
                             </form>
+                            </div>
                         </div>
-						<!-- Comments List -->
+                    }
+      
 						<div class="card mt-3">
 							<div class="card-body">
 								@foreach (ForthAssignment.Core.Aplication.Models.Comment.CommentModel comment in post.Comments)
@@ -91,11 +102,9 @@
                                     
 								}
 							</div>
-						</div>
-					</div>
-                </div>
+						</div>
 
-   
+					</div>
             }
         </div>
     </div>

@@ -40,6 +40,7 @@ namespace ForthAssingnment.Controllers
 
 		public async Task<IActionResult> NotActivated()
 		{
+			if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
 			return View();
 		}
 
@@ -48,6 +49,7 @@ namespace ForthAssingnment.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> NotActivated(string Email)
 		{
+			if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
 			try
 			{
 

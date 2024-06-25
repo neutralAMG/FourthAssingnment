@@ -165,8 +165,6 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
             try
             {
 
-                
-
                 return RedirectToAction(nameof(Index));
             }
             catch

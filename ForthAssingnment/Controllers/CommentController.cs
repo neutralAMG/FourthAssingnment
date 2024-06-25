@@ -137,61 +137,6 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 				return View();
 			}
 		}
-		// GET: CommentController/Edit/5
-		public async Task<IActionResult> EditComment(Guid id)
-		{
-			if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
-			if (!_userAuth.IsUserActivated()) return RedirectToAction("NotActivated", "Home");
-
-            Result<CommentModel> result = new();
-            try
-            {
-                result = await _commentService.GetById(id);
-
-                if (!result.IsSuccess)
-                {
-
-                }
-                return View(result.Data);
-            }
-            catch
-            {
-                throw;
-            }
-            
-		}
-
-		// POST: CommentController/Edit/5
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> EditComment(CommentSaveModel saveModel)
-		{
-			if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
-			if (!_userAuth.IsUserActivated()) return RedirectToAction("NotActivated", "Home");
-
-            Result<CommentSaveModel> result = new();
-            try
-            {
-                saveModel.CommentImgUrl = _fileHandler.UpdateFile(saveModel.File, saveModel.Id, baseUrl, saveModel.CommentImgUrl);
-                result = await _commentService.Update(saveModel);
-
-
-
-                if (!result.IsSuccess)
-                {
-                    ViewBag.messageError = "Error";
-                    return RedirectToAction("Index", "Post");
-                }
-                ViewBag.messageSucces = "Comment Updated";
-                return RedirectToAction("Index", "Post");
-            }
-            catch
-            {
-                ViewBag.messageError = "Error";
-                return RedirectToAction("Index", "Post");
-            }
-        }
-
 		// GET: CommentController/Delete/5
 		public ActionResult Delete(int id)
 		{

@@ -244,7 +244,7 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
                     return RedirectToAction("EditUser", "User");
                 }
                 ViewBag.messageSucces = "User Updated";
-                return RedirectToAction("EditUser", "User", new { messageSucces = "User Updated" });
+                return RedirectToAction("Index", "Post");
             }
             catch
             {
