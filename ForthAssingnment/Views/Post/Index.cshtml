@@ -42,7 +42,7 @@
                 <div class="card mb-3">
                     <div class="card-body">
                         <div class="d-flex align-items-center mb-2">
-                            <img src="@Url.Content(post.UserThatPostThis.ProfileImageUrl)" alt="Profile Picture" class="rounded-circle" width="50" height="50" onerror="this.onerror=null; this.src='/images/default-profile.png';">
+                            <img src="@Url.Content(post.UserThatPostThis.ProfileImageUrl ?? "/Images/default-profile/default.png")" alt="Profile Picture" class="rounded-circle" width="50" height="50" onerror="this.onerror=null; this.src='/images/default-profile.png';">
                             <div class="ml-3">
                                 <h5 class="card-title mb-0">@post.UserThatPostThis.UserName @post.UserThatPostThis.LastName</h5>
                                 <small class="text-muted">@post.DateCreated.ToString("g")</small>
@@ -51,7 +51,7 @@
                         <p class="card-text">@post.PostText</p>
                         @if (!string.IsNullOrEmpty(post.PostImgUrl))
                         {
-                            <img src="@post.PostImgUrl" class="img-fluid w-100" alt="Post Image">
+                            <img src="@Url.Content( post.PostImgUrl ?? "/Images/default-profile/default.png")" class="img-fluid w-100" alt="Post Image">
                         }
                         else if (!string.IsNullOrEmpty(post.VideoUrl))
                         {

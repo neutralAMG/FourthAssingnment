@@ -23,7 +23,7 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
 		public async Task<List<Post>> GetAll(Guid id)
 		{
 			return await _context.Posts.Include(p => p.Comments.Where(c => c.CommentRespondingTo == null))
-                    .ThenInclude(c => c.Comments).ThenInclude(c => c.Comments)
+                    .ThenInclude(c => c.Comments).ThenInclude(c => c.Comments).ThenInclude(c => c.Comments).ThenInclude(c => c.Comments).ThenInclude(c => c.Comments).ThenInclude(c => c.Comments)
                     .Include(p => p.Comments.Where(c => c.CommentRespondingTo == null)).ThenInclude(u => u.UserThatCommentetThis)
                     .Include(p => p.UserThatPostThis).Where(p => p.UserId == id).OrderByDescending( p => p.DateCreated).ToListAsync();	
 		}
@@ -38,8 +38,8 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
 				var currentFriendPosts = 
 					await _context.Posts
 					.Include(p => p.Comments.Where(c => c.CommentRespondingTo == null))
-					.ThenInclude(c => c.Comments).ThenInclude(c => c.Comments)
-					.Include(p => p.Comments.Where(c => c.CommentRespondingTo == null)).ThenInclude(u => u.UserThatCommentetThis)
+					.ThenInclude(c => c.Comments).ThenInclude(c => c.Comments).ThenInclude(c => c.Comments).ThenInclude(c => c.Comments).ThenInclude(c => c.Comments).ThenInclude(c => c.Comments)
+                    .Include(p => p.Comments.Where(c => c.CommentRespondingTo == null)).ThenInclude(u => u.UserThatCommentetThis)
 					.Include(p => p.UserThatPostThis)
 					.Where(u => u.UserId == user.Id).ToListAsync();
 				foreach (Post post in currentFriendPosts)

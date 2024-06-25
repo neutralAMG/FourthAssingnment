@@ -21,7 +21,7 @@ namespace ForthAssignment.Core.Aplication.Models.User
 		public IList<UserModel> UserFriends { get; set; }
 
 		[JsonIgnore]
-		public IList<UserModel> FriendsOfthUser { get; set; }
+		public IList<UserFriendSaveModel> FriendsOfthUser { get; set; }
 		public IList<PostModel> UserPosts { get; set; }
 		public IList<CommentModel> UserComments { get; set; }
 	}

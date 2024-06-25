@@ -57,8 +57,8 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
 		{
 			try
 			{
-				UserFriend UserFrindToDelete = await GetById(entity.Id);
-				_context.UsersFriends.Remove(UserFrindToDelete);
+				_context.UsersFriends.Remove(entity);
+			 await 	_context.SaveChangesAsync();
 				return true;
 			}
 			catch

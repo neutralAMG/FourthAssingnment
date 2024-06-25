@@ -107,8 +107,24 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 			if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
 			if (!_userAuth.IsUserActivated()) return RedirectToAction("NotActivated", "Home");
 
-			return View();
-		}
+
+            Result<UserFriendModel> result = new();
+            try
+            {
+                result = await _userFriendService.GetById(id);
+
+                if (!result.IsSuccess)
+                {
+
+                }
+
+                return View(result.Data);
+            }
+            catch
+            {
+                throw;
+            }
+        }
 
 		// POST: UserFriendController/Delete/5
 		[HttpPost]
@@ -118,14 +134,18 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 			if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
 			if (!_userAuth.IsUserActivated()) return RedirectToAction("NotActivated", "Home");
 
-			try
-			{
-				return RedirectToAction(nameof(Index));
-			}
-			catch
-			{
-				return View();
-			}
-		}
+
+            Result<UserFriendModel> result = new();
+            try
+            {
+
+                result = await _userFriendService.Delete(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
 	}
 }

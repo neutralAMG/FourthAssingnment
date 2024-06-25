@@ -128,6 +128,7 @@ namespace ForthAssignment.Core.Aplication.Services
         public override async Task<Result<UserFriendSaveModel>> Save(UserFriendSaveModel saveModel)
         {
             saveModel.UserId = _currentUser.Id;
+
             return await base.Save(saveModel);
         }
     }

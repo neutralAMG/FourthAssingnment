@@ -1,22 +1,20 @@
 ﻿@using ForthAssignment.Core.Aplication.Utils.UserSessionHandler;
+@using ForthAssingnment.Presentation.WepApp.Models
 @inject IHttpContextAccessor httpcontext;
 @{
     ForthAssignment.Core.Aplication.Models.User.UserModel User = httpcontext.HttpContext.Session.Get<ForthAssignment.Core.Aplication.Models.User.UserModel>("user");
 }
 @model List<ForthAssignment.Core.Aplication.Models.Post.PostModel>
 
-
-
 <div class="container mt-5">
-	@if (ViewBag.messageError is not null)
-	{
-		<p class="alert-danger d-block text-center">@ViewBag.messageError</p>
-	}
+    @if (ViewBag.messageError is not null)
+    {
+        <p class="alert-danger d-block text-center">@ViewBag.messageError</p>
+    }
     <div class="row justify-content-center">
-        <div class="col-md-8">
-
-            <div class="card mb-4">            
-                    <h3>Find a new friend</h3>
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <h3>Find a new friend</h3>
                 <div class="card-body">
                     <form asp-action="FindUserName" asp-controller="User" method="post" enctype="multipart/form-data">
                         <div class="form-group d-inline">
@@ -29,13 +27,18 @@
                 </div>
             </div>
 
+            @* Include the friend list partial view *@
+            @await Html.PartialAsync("FriendList", new UserFriendViewModel{ UsersFriends =User.FriendsOfthUser , Users =User.UserFriends })
+        </div>
 
-            @foreach (ForthAssignment.Core.Aplication.Models.Post.PostModel post in Model)
+        <div class="col-md-8">
+            @* Your existing posts rendering code... *@
+            @foreach (var post in Model)
             {
                 <div class="card mb-3">
                     <div class="card-body">
                         <div class="d-flex align-items-center mb-2">
-                            <img src="@Url.Content(post.UserThatPostThis.ProfileImageUrl)" alt="Profile Picture" class="rounded-circle" width="50" height="50" onerror="this.onerror=null; this.src='/images/default-profile.png';">
+                            <img src="@Url.Content(post.UserThatPostThis.ProfileImageUrl ?? "/Images/default-profile/default.png")" alt="Profile Picture" class="rounded-circle" width="50" height="50" onerror="this.onerror=null; this.src='/images/default-profile.png';">
                             <div class="ml-3">
                                 <h5 class="card-title mb-0">@post.UserThatPostThis.UserName @post.UserThatPostThis.LastName</h5>
                                 <small class="text-muted">@post.DateCreated.ToString("g")</small>
@@ -58,25 +61,19 @@
                         <span>@post.Comments.Count() comments</span>
                         @if (User.Id == post.UserThatPostThis.Id)
                         {
-
                             <a href="@Url.Action("EditPost", "Post", new { id = post.Id })" type="button" class="btn btn-sm btn-outline-secondary">Update</a>
                             <a href="@Url.Action("DeletePost", "Post", new { id = post.Id })" type="button" class="btn btn-sm btn-outline-danger">Delete</a>
                         }
                     </div>
                     @if (User.Id != post.UserThatPostThis.Id)
                     {
-
                         <div class="card mt-3">
                             <div class="card-body">
                                 <form asp-action="PostANewComment" asp-controller="Comment" method="post" enctype="multipart/form-data">
-
                                     <input type="hidden" name="PostId" value="@post.Id"></input>
-                                    <div class="form-row align-items-center"> 
-                                        <input type="hidden" class="form-control" name="num" value="2"></input>
+                                    <div class="form-row align-items-center">
                                         <div class="col-auto">
-                                            <input type="text" class="form-control" name="CommentText" placeholder="Add a comment..." required></input>
-                                           
-
+                                            <input type="text" class="form-control" name="CommentText" placeholder="Add a comment..." required>
                                         </div>
                                         <div class="col-auto">
                                             <input type="file" class="form-control-file" name="File" />
@@ -92,17 +89,15 @@
 
                     <div class="card mt-3">
                         <div class="card-body">
-                            @foreach (ForthAssignment.Core.Aplication.Models.Comment.CommentModel comment in post.Comments)
+                            @foreach (var comment in post.Comments)
                             {
                                 if (comment.CommentRespondingTo == default(Guid))
                                 {
                                     @await Html.PartialAsync("CommentList", comment)
                                 }
-
                             }
                         </div>
                     </div>
-
                 </div>
             }
         </div>
