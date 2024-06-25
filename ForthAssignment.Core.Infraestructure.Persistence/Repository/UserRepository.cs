@@ -22,9 +22,8 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
 
         public override async Task<User> GetById(Guid id)
         {
-            return await _context.Users
-                .Include(u => u.UserPosts)
-                .Include(u => u.UserFriends)
+            return await _context.Users.Include(u => u.UserFriends).ThenInclude(u => u.UsersFriend).ThenInclude(c => c.UserPosts)
+                    .Include(u => u.FriendsOfthUser).ThenInclude(u => u.UsersFriend).ThenInclude(c => c.UserPosts)
                 .Where(u => u.Id == id).FirstOrDefaultAsync();
         }
 

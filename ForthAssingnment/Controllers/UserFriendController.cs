@@ -1,11 +1,12 @@
 ﻿using ForthAssignment.Core.Aplication.Core;
 using ForthAssignment.Core.Aplication.Interfaces.Contracts;
 using ForthAssignment.Core.Aplication.Models.Post;
+using ForthAssignment.Core.Aplication.Models.User;
 using ForthAssignment.Core.Aplication.Models.UserFriend;
 using ForthAssignment.Core.Aplication.Utils.UserAuth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using ForthAssignment.Core.Aplication.Utils.UserSessionHandler;
 namespace ForthAssingnment.Presentation.WepApp.Controllers
 {
 	public class UserFriendController : Controller
@@ -13,12 +14,18 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 		private readonly IUserFriendService _userFriendService;
 		private readonly IUserAuth _userAuth;
         private readonly IPostService _postService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserService _userService;
+        public readonly UserModel _currentUser;
 
-        public UserFriendController(IUserFriendService userFriendService, IUserAuth userAuth, IPostService postService)
+        public UserFriendController(IUserFriendService userFriendService, IUserAuth userAuth, IPostService postService, IHttpContextAccessor httpContextAccessor, IUserService userService)
 		{
 			_userFriendService = userFriendService;
 			_userAuth = userAuth;
             _postService = postService;
+            _httpContextAccessor = httpContextAccessor;
+            _userService = userService;
+            _currentUser = _httpContextAccessor.HttpContext.Session.Get<UserModel>("user");
         }
 		// GET: UserFriendController
 		public async Task<IActionResult> Index()
@@ -72,6 +79,8 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 
 					return RedirectToAction(nameof(Index));
                 }
+				Result<UserModel> user = await _userService.GetById(_currentUser.Id);
+				_httpContextAccessor.HttpContext.Session.Set<UserModel>("user", user.Data);
 				return RedirectToAction(nameof(Index));
 			}
 			catch
@@ -140,6 +149,10 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
             {
 
                 result = await _userFriendService.Delete(id);
+
+                Result<UserModel> user = await _userService.GetById(_currentUser.Id);
+                _httpContextAccessor.HttpContext.Session.Set<UserModel>("user", user.Data);
+
                 return RedirectToAction(nameof(Index));
             }
             catch
