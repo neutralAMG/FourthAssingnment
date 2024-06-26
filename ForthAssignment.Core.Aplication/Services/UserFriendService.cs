@@ -135,6 +135,8 @@ namespace ForthAssignment.Core.Aplication.Services
                 result.Message = "Your are already friend's with this user";
                 return result;
             }
+
+
             result = await base.Save(saveModel);
 
             return result;

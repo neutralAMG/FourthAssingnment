@@ -36,7 +36,7 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
 		{
             var friendIds = UsersFriends.Select(user => user.Id).ToList();
 
-            // Retrieve all posts of all friends in a single query
+          
             var postOfFriends = await _context.Posts
                 .Include(p => p.Comments)
                     .ThenInclude(c => c.Comments)
@@ -47,7 +47,7 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
                     .ThenInclude(u => u.UserThatCommentetThis)
                 .Include(p => p.UserThatPostThis)
                 .Where(u => friendIds.Contains(u.UserId))
-                .OrderByDescending(p => p.DateCreated.Date)
+                .OrderByDescending(p => p.DateCreated)
                 .ToListAsync();
 
             return postOfFriends;
@@ -107,6 +107,11 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
 			{
 				Post PostToBeDeleted = await GetById(entity.Id);
 				 _context.Posts.Remove(entity);
+
+				IQueryable<Comment> CommentToDelete = _context.Comments.Where(c => c.PostId == entity.Id);
+				_context.Comments.RemoveRange(CommentToDelete);
+				
+				
 				await _context.SaveChangesAsync();	
 				return true;
 			}

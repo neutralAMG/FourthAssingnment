@@ -111,7 +111,7 @@ namespace ForthAssignment.Core.Aplication.Services
                 if (currentUser.UserName == UserName) {
 
 					result.IsSuccess = false;
-					result.Message = "Are you seriously triyng to befirend yourself come man;";
+					result.Message = "Are you seriously triyng to befriend yourself come on man";
 					return result;
 				}
 				if (UserName == null)
@@ -120,6 +120,14 @@ namespace ForthAssignment.Core.Aplication.Services
                     result.Message = "user name cant be empty";
                     return result;
                 }
+
+                if (!await _userRepository.Exits( u => u.UserName == UserName ))
+                {
+                    result.IsSuccess = false;
+                    result.Message = " this User dosent exist's in this app";
+                    return result;
+                }
+
                 User UserGetted = await _userRepository.GetUserByUserName(UserName);
 
                 if (UserGetted == null)
@@ -160,6 +168,13 @@ namespace ForthAssignment.Core.Aplication.Services
                 {
                     result.IsSuccess = false;
                     result.Message = "username or password is empty, both fiels are requiered to be full";
+                    return result;
+                }
+
+                if (!await _userRepository.Exits(u => u.UserName == userName))
+                {
+                    result.IsSuccess = false;
+                    result.Message = " this User dosent exist's in this app";
                     return result;
                 }
 

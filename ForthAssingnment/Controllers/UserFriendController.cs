@@ -36,6 +36,16 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
             try
 			{
 
+                if (TempData["MessageError"] != null)
+                {
+                    ViewBag.MessageError = TempData["MessageError"].ToString();
+				}
+				else
+				{
+					ViewBag.MessageError = ViewBag.MessageError;
+
+				}
+
 				result = await _postService.GetAllFrindsPosts();
                return View(result.Data);
 			}
@@ -46,11 +56,7 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 			
 		}
 
-		// GET: UserFriendController/Details/5
-		public ActionResult Details(int id)
-		{
-			return View();
-		}
+
 
 		// GET: UserFriendController/Create
 		public async Task<IActionResult> SaveANewFriend()
@@ -64,7 +70,7 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 		// POST: UserFriendController/Create
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> SaveANewFriend(string username, UserFriendSaveModel saveModel)
+		public async Task<IActionResult> SaveANewFriend(string usernameOfRequest, UserFriendSaveModel saveModel)
 		{
 			if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
 			if (!_userAuth.IsUserActivated()) return RedirectToAction("NotActivated", "Home");
@@ -75,13 +81,13 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 
 				if (!result.IsSuccess)
 				{
-					ViewBag.messageError = result.Message;	
-
-					return RedirectToAction(nameof(Index));
+					ViewBag.MessageError = result.Message;	
+					return View("Index", _postService.GetAllFrindsPosts().Result.Data);
                 }
+			     ViewBag.MessageSucces  = "Now you are friend's with " + usernameOfRequest + " that's so cool man";
 				Result<UserModel> user = await _userService.GetById(_currentUser.Id);
 				_httpContextAccessor.HttpContext.Session.Set<UserModel>("user", user.Data);
-				return RedirectToAction(nameof(Index));
+				return View("Index",  _postService.GetAllFrindsPosts().Result.Data);
 			}
 			catch
 			{

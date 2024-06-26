@@ -92,7 +92,7 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
         }
 
 
-        public async Task<IActionResult> ReplyToAComment(Guid id)
+        public async Task<IActionResult> ReplyToAComment(Guid id, int num)
         {
             if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
             if (!_userAuth.IsUserActivated()) return RedirectToAction("NotActivated", "Home");
@@ -105,7 +105,8 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
                 {
 
                 }
-                return View(result.Data);
+				ViewBag.Num = num;
+				return View(result.Data);
             }
             catch
             {
@@ -117,7 +118,7 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
         // POST: CommentController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ReplyToAComment(CommentSaveModel saveModel)
+        public async Task<IActionResult> ReplyToAComment(int num, CommentSaveModel saveModel)
         {
             if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
             if (!_userAuth.IsUserActivated()) return RedirectToAction("NotActivated", "Home");
@@ -140,10 +141,18 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
                 {
                     result.Data.CommentImgUrl = _fileHandler.UploudFile(saveModel.File, baseUrl, result.Data.Id);
                     result = await _commentService.Update(result.Data);
-                    return RedirectToAction("Index", "Post");
+                    if (num == 1)
+                    {
+                        return RedirectToAction("Index", "Post");
+                    }
+						return RedirectToAction("Index", "UserFriend");
                 }
 
-                return RedirectToAction("Index", "Post");
+                if(num == 1)
+                {
+                  return RedirectToAction("Index", "Post");
+                }
+               return RedirectToAction("Index", "UserFriend");
             }
             catch
             {

@@ -16,11 +16,12 @@
 
             @if(Model.PostImgUrl != null)
             {
+                <label class="custom-file-label" for="File">Add image</label>
                 <div class="form-group mt-2">
                     <input type="file" class="form-control-file" name="File" />
                 </div>
             }
-            else
+            else if(Model.VideoUrl != null)
             {
              <div class="form-group mt-2">
                 <input type="text" class="form-control" name="VideoUrl" value="@Model.VideoUrl" placeholder="Video URL" />

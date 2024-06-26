@@ -36,8 +36,9 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
         }
         // GET: UserController/Create
         public ActionResult LogIn()
-        {            
-            return View();
+        {
+			if (_userAuth.IsUserLogin()) return RedirectToAction("Index", "Post");
+			return View();
         }
 
         // POST: UserController/Create
@@ -110,8 +111,9 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
                     return View();
 
 
-                }else if( saveModel.PhoneNumber.Length > 10){
-                    ViewBag.MessageError = "The phone numbrer is to long";
+                }else if( saveModel.PhoneNumber.Length > 10 || saveModel.PhoneNumber.Length < 10)
+                {
+                    ViewBag.MessageError = "The phone numbrer is to long or short, it must be at least 10 numbers long";
                     return View();
                 }
 
@@ -221,11 +223,9 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 
                 if (!ressult.IsSuccess)
                 {
-                    ViewBag.MessageError = "User Dosent exist in app";
-                    return View("Index", "UserFriend");
+                    TempData["MessageError"] = ressult.Message;
+                    return RedirectToAction("index", "UserFriend");
                 }
-
-
                 return View(ressult.Data);
             }
             catch

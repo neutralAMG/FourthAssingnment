@@ -6,12 +6,15 @@
 }
 @model List<ForthAssignment.Core.Aplication.Models.Post.PostModel>
 
-
-@if (ViewBag.messageError is not null)
+﻿﻿
+@if (ViewBag.MessageError is not null)
 {
-	<p class="alert-danger d-block text-center">@ViewBag.messageError</p>
+    <p class="alert-danger d-block text-center">@ViewBag.MessageError</p>
 }
-
+@if (ViewBag.MessageSucces is not null)
+{
+    <p class=" alert alert-success d-block text-center" role="alert">@ViewBag.MessageSucces</p>
+}
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-4">
@@ -78,6 +81,7 @@
                                         <div class="col-auto">
                                             <input type="text" class="form-control" name="CommentText" placeholder="Add a comment..." required>
                                         </div>
+                                        <label class="custom-file-label" for="File">Add image</label>
                                         <div class="col-auto">
                                             <input type="file" class="form-control-file" name="File" />
                                         </div>

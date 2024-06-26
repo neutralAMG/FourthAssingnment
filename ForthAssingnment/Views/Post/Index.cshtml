@@ -21,8 +21,9 @@
                 <div class="card-body">
                     <form asp-action="PostANewPublication" asp-controller="Post" method="post" enctype="multipart/form-data">
                         <div class="form-group">
-                            <textarea class="form-control" name="PostText" rows="3" placeholder="What's on your mind?" required></textarea>
+                            <textarea class="form-control" name="PostText" rows="1" placeholder="What's on your mind?" required></textarea>
                         </div>
+                        <label class="custom-file-label" for="File">Add image</label>
                         <div class="form-group mt-2">
                             <input type="file" class="form-control-file" name="File" />
                         </div>
@@ -82,9 +83,9 @@
                                         <input type="hidden" class="form-control" name="num" value="1"></input>
                                     <div class="col-auto">
                                         <input type="text" class="form-control" name="CommentText"  placeholder="Add a comment..." required></input>
-                                       
-                                    </div>
-                                    <div class="col-auto">
+										</div>
+                                        <label class="custom-file-label" for="File">Add image</label>
+                                    <div class="col-auto"> 
                                         <input type="file" class="form-control-file" name="File" />
                                     </div>
                                     <div class="col-auto">
