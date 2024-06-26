@@ -6,47 +6,45 @@
 
 @model ForthAssignment.Core.Aplication.Models.Comment.CommentModel
 
-<div class="media mb-3">
-	<div class="media-body">
-		<div class="d-flex align-items-center justify-content-between mb-2">
+@{
+    int nestingLevel = ViewBag.NestingLevel ?? 0;
+}
 
-			<div class="d-inline">
-				<img src="@Url.Content(Model.UserThatCommentetThis.ProfileImageUrl ?? "/Images/default-profile/default.png")" alt="Profile Picture" class="mr-3 rounded-circle d-inline" width="40" height="40" onerror="this.onerror=null; this.src='/images/default-profile.png';">
-				<h6 class="mt-0 mb-0 d-inline">@Model.UserThatCommentetThis.UserName @Model.UserThatCommentetThis.LastName</h6>
-			</div>
-			<small class="text-muted p-0">@Model.DateCreated.ToString("g")</small>
-		</div>
-		@if (!string.IsNullOrEmpty(Model.CommentImgUrl))
-		{
-			<p class="small">@Model.CommentText</p>
-			<div class="h-50 w-50 text-center">
-				<img src="@Url.Content(Model.CommentImgUrl)" class="img-fluid w-100 text-center" alt="Comment Image" onerror="this.onerror=null; this.src='/images/default-comment.png';">
-			</div>
-		}
-		else
-		{
-			<span class="small">@Model.CommentText</span>
-		}
-		<div>
-			@if (User.Id != Model.UserThatCommentetThis.Id)
-			{
-
-				<a href="@Url.Action("ReplyToAComment", "Comment", new { id = Model.Id })" class="btn btn-link btn-sm p-0">Reply</a>
-
-
-			}
-
-
-		</div>
-		@if (Model.Comments != null && Model.Comments.Any())
-		{
-			<div class="media mt-3 ml-5">
-				@foreach (var reply in Model.Comments)
-				{
-					@await Html.PartialAsync("CommentList", reply)
-				}
-			</div>
-		}
-	</div>
+<div class="media mb-3" style="margin-left: @(nestingLevel * 5)px; font-size: @(108 - nestingLevel * 1.5)%;">
+    <div class="media-body" style="border-left: 2px solid #ccc; padding-left: 10px;">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+            <div class="d-inline">
+                <img src="@Url.Content(Model.UserThatCommentetThis.ProfileImageUrl ?? "/Images/default-profile/default.png")" alt="Profile Picture" class="mr-3 rounded-circle d-inline" width="40" height="40" onerror="this.onerror=null; this.src='/images/default-profile.png';">
+                <h6 class="mt-0 mb-0 d-inline">@Model.UserThatCommentetThis.UserName @Model.UserThatCommentetThis.LastName</h6>
+            </div>
+            <small class="text-muted p-0">@Model.DateCreated.ToString("g")</small>
+        </div>
+        @if (!string.IsNullOrEmpty(Model.CommentImgUrl))
+        {
+            <p class="small">@Model.CommentText</p>
+            <div class="h-50 w-50 text-center">
+                <img src="@Url.Content(Model.CommentImgUrl)" class="img-fluid w-100 text-center" alt="Comment Image" onerror="this.onerror=null; this.src='/images/default-comment.png';">
+            </div>
+        }
+        else
+        {
+            <span class="small">@Model.CommentText</span>
+        }
+        <div>
+            @if (User.Id != Model.UserThatCommentetThis.Id)
+            {
+                <a href="@Url.Action("ReplyToAComment", "Comment", new { id = Model.Id })" class="btn btn-link btn-sm p-0">Reply</a>
+            }
+        </div>
+        @if (Model.Comments != null && Model.Comments.Any())
+        {
+            <div class="media mt-3 ml-5">
+                @foreach (var reply in Model.Comments)
+                {
+                    ViewBag.NestingLevel = nestingLevel + 1;
+                    @await Html.PartialAsync("CommentList", reply)
+                }
+            </div>
+        }
+    </div>
 </div>
-

@@ -71,6 +71,7 @@
                             <div class="card-body">
                                 <form asp-action="PostANewComment" asp-controller="Comment" method="post" enctype="multipart/form-data">
                                     <input type="hidden" name="PostId" value="@post.Id"></input>
+                                    <input type="hidden" name="num" value="2"></input>
                                     <div class="form-row align-items-center">
                                         <div class="col-auto">
                                             <input type="text" class="form-control" name="CommentText" placeholder="Add a comment..." required>

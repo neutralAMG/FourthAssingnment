@@ -154,12 +154,17 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
             Result<UserModel> ressult = new();
             try
             {
+                if (string.IsNullOrEmpty( username ))
+                {
+                    ViewBag.MessageError = "Username cant be empty";
+                    return View();
+                }
 
                 ressult = await _userService.ChangePassword(username);
 
                 if (!ressult.IsSuccess)
                 {
-                    ViewBag.messageError = "User Dosent exist in app";
+                    ViewBag.MessageError = "User Dosent exist in app";
                     return View();
                 }
 
@@ -202,7 +207,7 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 
                 if (!ressult.IsSuccess)
                 {
-                    ViewBag.messageError = "User Dosent exist in app";
+                    ViewBag.MessageError = "User Dosent exist in app";
                     return View("Index", "UserFriend");
                 }
 

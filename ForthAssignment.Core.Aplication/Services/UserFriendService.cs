@@ -127,9 +127,17 @@ namespace ForthAssignment.Core.Aplication.Services
         }
         public override async Task<Result<UserFriendSaveModel>> Save(UserFriendSaveModel saveModel)
         {
+            Result<UserFriendSaveModel> result = new();
             saveModel.UserId = _currentUser.Id;
+            if (await _userFriendRepository.Exits(u => u.UserFriendId == saveModel.UserFriendId && u.UserId == saveModel.UserId))
+            {
+                result.IsSuccess = false;
+                result.Message = "Your are already friend's with this user";
+                return result;
+            }
+            result = await base.Save(saveModel);
 
-            return await base.Save(saveModel);
+            return result;
         }
     }
 
