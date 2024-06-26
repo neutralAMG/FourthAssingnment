@@ -32,6 +32,7 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 			{
 				result = await _postService.GetAll();
 
+
 				if (!result.IsSuccess)
 				{
 

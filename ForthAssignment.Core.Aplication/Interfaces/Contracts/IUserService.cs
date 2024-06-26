@@ -11,6 +11,7 @@ namespace ForthAssignment.Core.Aplication.Interfaces.Contracts
 		Task<Result<UserModel>> ActivateUser(string code);
 		Task<Result<UserModel>> GetUserByUserName(string UserName);
         Task<Result<UserModel>> ChangePassword(string username);
+		Task<Result<UserSaveModel>> UpdateForTheRegister(UserSaveModel updateModel);
 
     }
 }

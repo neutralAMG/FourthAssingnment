@@ -159,7 +159,7 @@ namespace ForthAssignment.Core.Aplication.Services
                 if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
                 {
                     result.IsSuccess = false;
-                    result.Message = "username or password is empty";
+                    result.Message = "username or password is empty, both fiels are requiered to be full";
                     return result;
                 }
 
@@ -231,18 +231,33 @@ namespace ForthAssignment.Core.Aplication.Services
 
         public override async Task<Result<UserSaveModel>> Update(UserSaveModel updateModel)
         {
+             Result<UserSaveModel> result = new();
+             Result<UserModel> resultForChecking = await base.GetById(updateModel.Id);
+
+            if (!resultForChecking.Data.Password.Equals(updateModel.Password))
+            {
+                updateModel.Password = _passwordHasher.HashPassword(updateModel.Password);
+            }
+            
+            result = await base.Update(updateModel);
+         
+                if (result.IsSuccess)
+                {
+                    UserModel currentUser = _httpContextAccessor.HttpContext.Session.Get<UserModel>("user");
+
+                    UserModel UpdatedUser = _mapper.Map<UserModel>(_userRepository.GetById(currentUser.Id).Result);
+
+                    _httpContextAccessor.HttpContext.Session.Set<UserModel>("user", UpdatedUser);
+                }
+        
+            return result;
+        }
+
+        public  async Task<Result<UserSaveModel>> UpdateForTheRegister(UserSaveModel updateModel)
+        {
             Result<UserSaveModel> result = new();
 
             result = await base.Update(updateModel);
-
-            if (result.IsSuccess)
-            {
-                UserModel currentUser = _httpContextAccessor.HttpContext.Session.Get<UserModel>("user");
-
-                UserModel UpdatedUser = _mapper.Map<UserModel>(_userRepository.GetById(currentUser.Id).Result);
-
-                _httpContextAccessor.HttpContext.Session.Set<UserModel>("user", UpdatedUser);
-            }
 
             return result;
         }

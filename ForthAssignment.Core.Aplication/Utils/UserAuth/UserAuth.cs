@@ -21,7 +21,8 @@ namespace ForthAssignment.Core.Aplication.Utils.UserAuth
 
 		public bool IsUserLogin()
 		{
-			return _httpContextAccessor.HttpContext.Session.Get<UserModel>("user") != null? true : false;
+            if (_httpContextAccessor.HttpContext.Session.Get<UserModel>("user") is null) return false;
+            return _httpContextAccessor.HttpContext.Session.Get<UserModel>("user") != null? true : false;
 		}
 	}
 }

@@ -54,6 +54,7 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 
                 if (!result.IsSuccess)
                 {
+                    ViewBag.MessageError = result.Message;
                     return View();
                 }
 
@@ -69,7 +70,7 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
         public async Task<IActionResult> LogOut()
         {
             if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
-            if (!_userAuth.IsUserActivated()) return RedirectToAction("NotActivated", "Home");
+
 
 
             _httpContextAccessor.HttpContext.Session.Remove("user");
@@ -94,9 +95,16 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
             Result<UserSaveModel> result = new();
             try
             {
+
+                if (!ModelState.IsValid)
+                {
+                    ViewBag.MessageError = ModelState.Values.SelectMany(v => v.Errors).First().ErrorMessage;
+                    return View();
+                }
+
                 if (!saveModel.Password.Equals(saveModel.ConfirmPassword))
                 {
-                    ViewBag.messageError = "The passwords must mach";
+                    ViewBag.MessageError = "The passwords must mach";
                     return View();
                 }
 
@@ -113,16 +121,16 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 
                 result.Data.ProfileImageUrl = _fileHandler.UploudFile(saveModel.File, basePath, result.Data.Id);
 
-                result = await _userService.Update(result.Data);
+                result = await _userService.UpdateForTheRegister(result.Data);
 
                 if (!result.IsSuccess)
                 {
-                    ViewBag.messageError = result.Message;
+                    ViewBag.MessageError = result.Message;
                     return View();
                 }
 
-                ViewBag.messageSucces = "User was created without problems, now Login ";
-                return RedirectToAction("LogIn", "User");
+                ViewBag.MessageSucces = "User was created without problems your activation code has been sent to your email, now Login and activate your account";
+                return View("LogIn");
             }
             catch
             {
@@ -168,16 +176,9 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
         {
             if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
             if (!_userAuth.IsUserActivated()) return RedirectToAction("NotActivated", "Home");
-            Result<UserModel> ressult = new();
-            try
-            {
-                if (!ressult.IsSuccess)
-                {
-                    ViewBag.messageError = "User Dosent exist in app";
-                    return View();
-                }
 
-                ViewBag.messageSucces = "Your password has been changed, check the email sended to you to check it";
+            try
+            { 
                 return View(user);
             }
             catch
@@ -202,10 +203,10 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
                 if (!ressult.IsSuccess)
                 {
                     ViewBag.messageError = "User Dosent exist in app";
-                    return View();
+                    return View("Index", "UserFriend");
                 }
 
-                ViewBag.messageSucces = "Your password has been changed, check the email sended to you to check it";
+
                 return View(ressult.Data);
             }
             catch
@@ -235,7 +236,7 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 
                 if (!result.IsSuccess)
                 {
-                    ViewBag.messageError = result.Message;
+                    TempData["MessageError"] =  result.Message;
                     return RedirectToAction("NotActivated", "Home");
                 }
                 return View();
@@ -275,30 +276,50 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
         // POST: UserController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditUser(UserSaveModel saveModel)
+        public async Task<IActionResult> EditUser(string OldPassword, string OldConfirmPassword, UserSaveModel saveModel)
         {
             if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
             if (!_userAuth.IsUserActivated()) return RedirectToAction("NotActivated", "Home");
+
             Result<UserSaveModel> result = new();
             try
             {
+                Result<UserModel> resultInner = await _userService.GetById(saveModel.Id);
+
+                if (saveModel.Password is null && saveModel.ConfirmPassword is null)
+                {
+                    saveModel.Password = OldPassword;
+                    saveModel.ConfirmPassword = OldConfirmPassword;
+                }
+                else if (saveModel.Password != saveModel.ConfirmPassword)
+                {
+                    ViewBag.MessageError = "the passwords must match";
+                    return View(resultInner.Data);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    ViewBag.MessageError = ModelState.Values.SelectMany(v => v.Errors).First().ErrorMessage;
+                    return View(resultInner.Data);
+                }
+
                 saveModel.ProfileImageUrl = _fileHandler.UpdateFile(saveModel.File, saveModel.Id, basePath, saveModel.ProfileImageUrl);
+
                 result = await _userService.Update(saveModel);
-
-
 
                 if (!result.IsSuccess)
                 {
-                    ViewBag.messageError = "Error";
-                    return RedirectToAction("EditUser", "User");
+                  
+                    ViewBag.MessageError = "Error";
+                    return View(resultInner.Data);
                 }
-                ViewBag.messageSucces = "User Updated";
-                return RedirectToAction("Index", "Post");
+                
+                ViewBag.messageSucces = "User data was Updated succesfully";
+                return View(resultInner.Data);
             }
             catch
             {
-                ViewBag.messageError = "Error";
-                return RedirectToAction("EditUser", "User");
+                throw;
             }
         }
 

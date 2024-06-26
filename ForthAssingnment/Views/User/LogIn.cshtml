@@ -1,14 +1,15 @@
 ﻿﻿﻿
 @if (ViewBag.MessageError is not null)
 {
-    <p class="alert-danger d-block text-center">@ViewBag.message</p>
+    <p class="alert-danger d-block text-center">@ViewBag.MessageError</p>
 }
-@if (ViewBag.messageSucces is not null)
+@if (ViewBag.MessageSucces is not null)
 {
-    <p class=" alert alert-success d-block text-center" role="alert">@ViewBag.messageSucces</p>
+    <p class=" alert alert-success d-block text-center" role="alert">@ViewBag.MessageSucces</p>
 }
 <div class="row">
-    <div class="col-8 offset-2">
+	<div class="col-8 offset-2">
+	
         <div class=" bg-dark text-light">
             <h1 class="text-center"> Login </h1>
         </div>

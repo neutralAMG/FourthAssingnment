@@ -52,6 +52,7 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
                 UserToBeUpdated.Name = entity.UserName;
                 UserToBeUpdated.LastName = entity.LastName;
                 UserToBeUpdated.Email = entity.Email;
+                UserToBeUpdated.Password = entity.Password;
                 UserToBeUpdated.PhoneNumber = entity.PhoneNumber;
                 UserToBeUpdated.ProfileImageUrl = entity.ProfileImageUrl;
 
@@ -71,7 +72,7 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
 
                 return await _context.Users.Include(u => u.UserFriends).ThenInclude(u => u.UsersFriend).ThenInclude(c => c.UserPosts)
                     .Include(u => u.FriendsOfthUser).ThenInclude(u => u.UsersFriend).ThenInclude(c => c.UserPosts)
-					.Where(u => u.UserName == username).FirstOrDefaultAsync();
+					.Where(u => u.UserName.Equals(username)).FirstOrDefaultAsync();
             }
             catch
             {

@@ -7,6 +7,16 @@
     var user = httpContext.HttpContext.Session.Get<UserModel>("user");
 }
 
+@if (ViewBag.MessageError is not null)
+{
+    <p class="alert-danger d-block text-center">@ViewBag.MessageError</p>
+}
+
+@if (ViewBag.MessageSucces is not null)
+{
+    <p class=" alert alert-success d-block text-center" role="alert">@ViewBag.MessageSucces</p>
+}
+
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -16,7 +26,7 @@
                 </div>
                 <div class="card-body text-center">
                     <p class="card-text">Please check your email to activate your account.</p>
-                    <p class="card-text">If you did not receive an email, click the button below to resend the activation message.</p>
+                    <p class="card-text">If you did not receive an email or your code expired, click the button below to resend the activation message.</p>
                     <form method="post" asp-action="NotActivated" asp-controller="Home" class="d-inline">
                         <input type="hidden" name="id" value="@user.Id" />
                         <input type="hidden" name="Email" value="@user.Email" />

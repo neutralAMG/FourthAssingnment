@@ -41,7 +41,12 @@ namespace ForthAssingnment.Controllers
 		public async Task<IActionResult> NotActivated()
 		{
 			if (!_userAuth.IsUserLogin()) return RedirectToAction("LogIn", "User");
-			return View();
+
+            if (TempData["MessageError"] != null)
+            {
+                ViewBag.MessageError = TempData["MessageError"].ToString();
+            }
+            return View();
 		}
 
 		// POST: UserController/Create
@@ -57,7 +62,7 @@ namespace ForthAssingnment.Controllers
 
                 _httpContextAccessor.HttpContext.Session.SetString("code", CodeToBySend);
 
-             await   _emailService.SendAsync(new ForthAssignment.Core.Aplication.Dtos.EmailRequest
+             await _emailService.SendAsync(new ForthAssignment.Core.Aplication.Dtos.EmailRequest
                 {
                     EmailTo = Email,
                     EmailSubject = "Let's activate your user ",
@@ -65,7 +70,9 @@ namespace ForthAssingnment.Controllers
                     EmailBody = new StringBuilder().Append("<!DOCTYPE html>\r\n<html lang=\"en\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n    <title>Activate Your Account</title>\r\n    <style>\r\n        body {\r\n            font-family: Arial, sans-serif;\r\n            line-height: 1.6;\r\n            color: #333;\r\n        }\r\n        .container {\r\n            max-width: 600px;\r\n            margin: 0 auto;\r\n            padding: 20px;\r\n            border: 1px solid #ddd;\r\n            border-radius: 5px;\r\n        }\r\n        .code {\r\n            display: inline-block;\r\n            padding: 10px;\r\n            margin-top: 20px;\r\n            font-size: 16px;\r\n            color: #fff;\r\n            background-color: #28a745;\r\n            text-align: center;\r\n            border-radius: 5px;\r\n            font-weight: bold;\r\n        }\r\n    </style>\r\n</head>\r\n<body>\r\n    <div class=\"container\">\r\n        <h1>Welcome to Our Service</h1>\r\n        <p>Hello,</p>\r\n        <p>Thank you for registering with us. Please use the following code to activate your account:</p>\r\n        <div class=\"code\">" + CodeToBySend + "</div>\r\n        <p>If you did not register for this account, please ignore this email.</p>\r\n        <p>Best regards,<br>The Team</p>\r\n    </div>\r\n</body>\r\n</html>").ToString()
 
                 });
-                return RedirectToAction(nameof(Index));
+
+				ViewBag.MessageSucces = "The email has been resended now check it out and activate your account with your new code";
+                return View();
 			}
 			catch
 			{
