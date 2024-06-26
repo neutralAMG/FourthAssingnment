@@ -36,7 +36,7 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
         }
         // GET: UserController/Create
         public ActionResult LogIn()
-        {
+        {            
             return View();
         }
 
@@ -96,11 +96,25 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
             try
             {
 
+
                 if (!ModelState.IsValid)
                 {
                     ViewBag.MessageError = ModelState.Values.SelectMany(v => v.Errors).First().ErrorMessage;
                     return View();
                 }
+
+                string BeginingOfPthoneNumber = saveModel.PhoneNumber.Substring(0,3);
+                if (BeginingOfPthoneNumber != "829" && BeginingOfPthoneNumber != "849" && BeginingOfPthoneNumber != "809")
+                {
+                    ViewBag.MessageError = "The phone numbrer must be of the style of dominican republic so it must begin with ether 829, 849, 809";
+                    return View();
+
+
+                }else if( saveModel.PhoneNumber.Length > 10){
+                    ViewBag.MessageError = "The phone numbrer is to long";
+                    return View();
+                }
+
 
                 if (!saveModel.Password.Equals(saveModel.ConfirmPassword))
                 {
@@ -168,8 +182,8 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
                     return View();
                 }
 
-                ViewBag.messageSucces = "Your password has been changed, check the email sended to you to check it";
-                return RedirectToAction(nameof(LogIn));
+                ViewBag.MessageSucces = "Your password has been changed, check the email sended to you to check it";
+                return View("LogIn");
             }
             catch
             {
@@ -308,6 +322,20 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
                     return View(resultInner.Data);
                 }
 
+                string BeginingOfPthoneNumber = saveModel.PhoneNumber.Substring(0, 3);
+                if (BeginingOfPthoneNumber != "829" && BeginingOfPthoneNumber != "849" && BeginingOfPthoneNumber != "809")
+                {
+                    ViewBag.MessageError = "The phone numbrer must be of the style of dominican republic so it must begin with ether 829, 849, 809";
+                    return View(resultInner.Data);
+
+
+                }
+                else if (saveModel.PhoneNumber.Length > 10)
+                {
+                    ViewBag.MessageError = "The phone numbrer is to long";
+                    return View(resultInner.Data);
+                }
+
                 saveModel.ProfileImageUrl = _fileHandler.UpdateFile(saveModel.File, saveModel.Id, basePath, saveModel.ProfileImageUrl);
 
                 result = await _userService.Update(saveModel);
@@ -318,8 +346,10 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
                     ViewBag.MessageError = "Error";
                     return View(resultInner.Data);
                 }
-                
-                ViewBag.messageSucces = "User data was Updated succesfully";
+
+                resultInner = await _userService.GetById(saveModel.Id);
+
+                ViewBag.MessageSucces = "User data was Updated succesfully";
                 return View(resultInner.Data);
             }
             catch

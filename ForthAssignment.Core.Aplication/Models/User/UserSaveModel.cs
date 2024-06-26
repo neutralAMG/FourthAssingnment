@@ -19,6 +19,7 @@ namespace ForthAssignment.Core.Aplication.Models.User
         [Required(ErrorMessage = "UserName is a require fild")]
         public string UserName { get; set; }
         [Required(ErrorMessage = "Phone Number is a require fild")]
+        [Phone]
         public string PhoneNumber { get; set; }
         [Required(ErrorMessage = "Email is a require fild")]
         public string Email { get; set; }

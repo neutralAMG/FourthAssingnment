@@ -11,7 +11,7 @@
 }
 
 <div class="media mb-3" style="margin-left: @(nestingLevel * 5)px; font-size: @(108 - nestingLevel * 1.5)%;">
-    <div class="media-body" style="border-left: 2px solid #ccc; padding-left: 10px;">
+    <div class="media-body" style="border-left: 2px solid #ccc; padding-left: 10px; padding-bottom: 10px;">
         <div class="d-flex align-items-center justify-content-between mb-2">
             <div class="d-inline">
                 <img src="@Url.Content(Model.UserThatCommentetThis.ProfileImageUrl ?? "/Images/default-profile/default.png")" alt="Profile Picture" class="mr-3 rounded-circle d-inline" width="40" height="40" onerror="this.onerror=null; this.src='/images/default-profile.png';">

@@ -49,7 +49,7 @@ namespace ForthAssignment.Infraestructure.Persistence.Repository
             try
             {
                 User UserToBeUpdated = _context.Users.Find(entity.Id);
-                UserToBeUpdated.Name = entity.UserName;
+                UserToBeUpdated.Name = entity.Name;
                 UserToBeUpdated.LastName = entity.LastName;
                 UserToBeUpdated.Email = entity.Email;
                 UserToBeUpdated.Password = entity.Password;

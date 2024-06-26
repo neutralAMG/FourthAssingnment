@@ -6,22 +6,24 @@
 }
 @model List<ForthAssignment.Core.Aplication.Models.Post.PostModel>
 
+
+@if (ViewBag.messageError is not null)
+{
+	<p class="alert-danger d-block text-center">@ViewBag.messageError</p>
+}
+
 <div class="container mt-5">
-    @if (ViewBag.messageError is not null)
-    {
-        <p class="alert-danger d-block text-center">@ViewBag.messageError</p>
-    }
     <div class="row justify-content-center">
         <div class="col-md-4">
             <div class="card mb-4">
-                <h3>Find a new friend</h3>
+                <h3 class="text-center">Find a new friend</h3>
                 <div class="card-body">
                     <form asp-action="FindUserName" asp-controller="User" method="post" enctype="multipart/form-data">
                         <div class="form-group d-inline">
                             <input class="form-control d-inline" name="username" required></input>
                         </div>
                         <div class="form-group text-right mt-2">
-                            <button type="submit" class="btn btn-primary d-inline">Find a user to befriend</button>
+                            <button type="submit" class="btn btn-primary d-inline end-0">Find a user to befriend</button>
                         </div>
                     </form>
                 </div>
