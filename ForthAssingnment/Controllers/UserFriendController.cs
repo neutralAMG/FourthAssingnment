@@ -40,6 +40,10 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
                 {
                     ViewBag.MessageError = TempData["MessageError"].ToString();
 				}
+				else if (TempData["MessageSucces"] != null)
+				{
+					ViewBag.MessageSucces = TempData["MessageSucces"].ToString();
+				}
 				else
 				{
 					ViewBag.MessageError = ViewBag.MessageError;
@@ -84,10 +88,12 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 					ViewBag.MessageError = result.Message;	
 					return View("Index", _postService.GetAllFrindsPosts().Result.Data);
                 }
-			     ViewBag.MessageSucces  = "Now you are friend's with " + usernameOfRequest + " that's so cool man";
+				TempData["MessageSucces"] = "Now you are friend's with " + usernameOfRequest + " that's so cool man";
+
 				Result<UserModel> user = await _userService.GetById(_currentUser.Id);
 				_httpContextAccessor.HttpContext.Session.Set<UserModel>("user", user.Data);
-				return View("Index",  _postService.GetAllFrindsPosts().Result.Data);
+
+				return RedirectToAction("Index",  _postService.GetAllFrindsPosts().Result.Data);
 			}
 			catch
 			{
