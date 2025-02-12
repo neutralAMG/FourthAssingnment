@@ -83,7 +83,7 @@ namespace ForthAssingnment.Presentation.WepApp.Controllers
 			{
 				result = await _userFriendService.Save(saveModel);
 
-				if (!result.IsSuccess)
+				if (!result.IsSuccess) 
 				{
 					ViewBag.MessageError = result.Message;	
 					return View("Index", _postService.GetAllFrindsPosts().Result.Data);
